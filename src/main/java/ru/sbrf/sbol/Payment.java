@@ -8,10 +8,10 @@ public class Payment {
     private String account = "";
     private Date dateTime = new Date();
     private String currency = "RUB";
-    private float amount;
+    private double amount;
 
     public Payment() {}
-    public Payment(String id, String account, Date dateTime, String currency, float amount) {
+    public Payment(String id, String account, Date dateTime, String currency, double amount) {
         this.id = id;
         this.account = account;
         this.dateTime = dateTime;
@@ -31,8 +31,8 @@ public class Payment {
     public void setCurrency(String currency) { this.currency = currency; }
     public String getCurrency() { return currency; }
 
-    public void setAmount(float amount) { this.amount = amount; }
-    public float getAmount() { return amount; }
+    public void setAmount(double amount) { this.amount = amount; }
+    public double getAmount() { return amount; }
 
     @Override
     public String toString() {

@@ -25,7 +25,7 @@ public interface UserValidation{
         }
         return currency;
     }
-    default double checkAmount(Double amount) {
+    default double checkAmount(double amount) {
         if (amount < 0) {
             System.out.println("Поле amount < 0. Возращен 0.");
         }

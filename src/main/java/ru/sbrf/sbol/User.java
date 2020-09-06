@@ -6,11 +6,11 @@ public class User implements UserValidation{
     private String clientNumber = "";
     private String accountNumber = "";
     private String currency = "RUB";
-    private float amount;
+    private double amount;
 
     public User() {}
-    public User(String phoneNumber, String clientNumber, String accountNumber, String currency, float amount) {
-        this.phoneNumber = phoneNumber;
+    public User(String phoneNumber, String clientNumber, String accountNumber, String currency, double amount) {
+        setPhoneNumber(phoneNumber);
         this.clientNumber = clientNumber;
         this.accountNumber = accountNumber;
         this.currency = currency;
@@ -43,9 +43,8 @@ public class User implements UserValidation{
     public void setCurrency(String currency) { this.currency = currency; }
     public String getCurrency() { return currency; }
 
-    public void setAmount(float amount) { this.amount = amount; }
-    public float getAmount() { return amount; }
-
+    public void setAmount(double amount) { this.amount = amount; }
+    public double getAmount() { return amount; }
 
     @Override
     public String toString() {
