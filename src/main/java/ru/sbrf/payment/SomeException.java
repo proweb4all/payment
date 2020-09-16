@@ -1,4 +1,4 @@
-package ru.sbrf.sbol;
+package ru.sbrf.payment;
 
 class SomeException extends Exception{
     private String outText = "Не инициализировано (default)";

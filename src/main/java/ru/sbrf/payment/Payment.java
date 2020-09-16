@@ -1,7 +1,8 @@
-package ru.sbrf.sbol;
+package ru.sbrf.payment;
 
 import java.util.Date;
 
+@lombok.Getter
 public class Payment {
     //сумма платежа, счет платежа, время платежа, номер платежа
     private String id = "";
@@ -20,19 +21,14 @@ public class Payment {
     }
 
     public void setId(String id) { this.id = id; }
-    public String getId() { return id; }
 
     public void setAccount(String account) { this.account = account; }
-    public String getAccount() { return account; }
 
     public void setDateTime(Date dateTime) { this.dateTime = dateTime; }
-    public Date getDateTime() { return dateTime; }
 
     public void setCurrency(String currency) { this.currency = currency; }
-    public String getCurrency() { return currency; }
 
     public void setAmount(double amount) { this.amount = amount; }
-    public double getAmount() { return amount; }
 
     @Override
     public String toString() {

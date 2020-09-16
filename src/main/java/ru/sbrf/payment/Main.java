@@ -1,4 +1,6 @@
-package ru.sbrf.sbol;
+package ru.sbrf.payment;
+
+import ru.sbrf.payment.app.App;
 
 public class Main {
     public static void main(String[] args) {
@@ -11,8 +13,8 @@ public class Main {
         User user2 = new User("1234567", "123456", "40817810X53051234567", "RUB", 1000.0);
         System.out.println(user2.toString());
         System.out.println("--- AppSbol ---");
-        AppSbol appSbol = new AppSbol();
-        System.out.println(appSbol);
+        App app = new App();
+        System.out.println(app);
         System.out.println("--- Payment ---");
         Payment payment = new Payment();
         System.out.println(payment);

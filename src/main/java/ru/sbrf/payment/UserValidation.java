@@ -1,4 +1,4 @@
-package ru.sbrf.sbol;
+package ru.sbrf.payment;
 
 public interface UserValidation{
     default String checkPhoneNumber(String phoneNumber) {
