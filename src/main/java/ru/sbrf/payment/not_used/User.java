@@ -1,4 +1,4 @@
-package ru.sbrf.payment;
+package ru.sbrf.payment.not_used;
 
 public class User implements UserValidation{
     //номер телефона, сумма, валюта, номер счета, номер клиента

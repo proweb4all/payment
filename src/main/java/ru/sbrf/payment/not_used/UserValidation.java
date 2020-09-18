@@ -1,4 +1,4 @@
-package ru.sbrf.payment;
+package ru.sbrf.payment.not_used;
 
 public interface UserValidation{
     default String checkPhoneNumber(String phoneNumber) {

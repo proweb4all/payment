@@ -1,37 +1,26 @@
 package ru.sbrf.payment.app;
 
-import lombok.*;
+import ru.sbrf.payment.common.Settings;
+import ru.sbrf.payment.server.Payment;
+import java.util.Date;
 
+import lombok.*;
 @ToString
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 
 public class App {
-    //приложение (sbol) метод pay (адрес хоста, ip, port, protocol)
-    private String hostAddress = "";
-    private String ipAddress = "";
-    private String port = "";
-    private String protocol = "";
-    private UserApp user;
+    private Settings settings = new Settings();
+    private UserApp user = new UserApp();
 
-    public App(UserApp user) {
-        this.user = user;
-    }
-//    public App(String hostAddress, String ipAddress, String port, String protocol, UserApp user) {
-//        this.hostAddress = hostAddress;
-//        this.ipAddress = ipAddress;
-//        this.port = port;
-//        this.protocol = protocol;
-//        this.user = user;
-//    }
-
-    public String authUser(String password) {
-        // Посылает на сервер phone и password, возвращает результат проверки
+    public String authUser(String phone, String password) {
+        // Сделать отсылку на сервер phone и password, возвратить результат проверки boolean
         boolean res = true;
         String result = "Ошибка авторизации";
         if (res) {
             String name = "Ваня Ветров";
+            this.user.setPhone(phone);
             double balance = 100.0;
             this.user.setAuth(String.valueOf(res));
             this.user.setUserName(name);
@@ -42,14 +31,19 @@ public class App {
         return result;
     }
 
-    public String payApp() {
-        if (this.user.getAuth() != "") {
-            //Отправить платеж
-            return "Платеж от " + this.user.getUserName() + " (т." + this.user.getPhone() + ") на сумму ... отправлен";
+    public Payment payApp(String payeePhone, double amount) {
+        if (this.user.getAuth().equals("true")) {
+            // Создать платеж
+            Date dateNow = new Date();
+            Payment payment = new Payment(this.user.getPhone() + '_' + dateNow.getTime(),
+                    dateNow, "1. Создан платеж", this.user.getPhone(), payeePhone, amount);
+            System.out.println(payment.getStatus() + " от " + this.user.getUserName() + ":\n" + payment);
+            return payment;
         } else {
-            return "Вы не авторизованы в приложении. Без этого отправка платежей невозможна.";
+            Payment payment = new Payment();
+            System.out.println("Вы не авторизованы в приложении. Без этого отправка платежей невозможна.\n" + payment);
+            return payment;
         }
-        //PaymentApp payment = new PaymentApp();
     }
 
 
