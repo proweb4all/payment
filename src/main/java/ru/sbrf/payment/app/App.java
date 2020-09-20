@@ -1,10 +1,12 @@
 package ru.sbrf.payment.app;
 
 import ru.sbrf.payment.common.Settings;
-import ru.sbrf.payment.server.Payment;
+import ru.sbrf.payment.db.PaymentDB;
 import java.util.Date;
 
 import lombok.*;
+import ru.sbrf.payment.db.UsersDB;
+
 @ToString
 @Getter
 @NoArgsConstructor
@@ -14,37 +16,27 @@ public class App {
     private Settings settings = new Settings();
     private UserApp user = new UserApp();
 
-    public String authUser(String phone, String password) {
+    public boolean authUser(String phone, String password, UsersDB usersDB) {
         // Сделать отсылку на сервер phone и password, возвратить результат проверки boolean
-        boolean res = true;
-        String result = "Ошибка авторизации";
-        if (res) {
-            String name = "Ваня Ветров";
-            this.user.setPhone(phone);
-            double balance = 100.0;
-            this.user.setAuth(String.valueOf(res));
-            this.user.setUserName(name);
-            this.user.setBalance(balance);
-            result = "Успешная авторизация: " + this.user.getUserName() + " (т." + this.user.getPhone() +
-                    ") " + this.user.getBalance() + " (" + this.user.getAuth() + ")" + " (" + password + ")";
+        System.out.println("Попытка авторизации пользователя с т." + phone + "...");
+        this.user = usersDB.authUser(phone, password);
+        boolean result = false;
+        if (this.user.getAuth().equals("true")) {
+            result = true;
+            System.out.println("Успешная авторизация: " + this.user.getUserName() + " (т." + this.user.getPhone() +
+                    ") " + this.user.getBalance());
         }
+        System.out.println(this.toString());
         return result;
     }
 
-    public Payment payApp(String payeePhone, double amount) {
-        if (this.user.getAuth().equals("true")) {
-            // Создать платеж
-            Date dateNow = new Date();
-            Payment payment = new Payment(this.user.getPhone() + '_' + dateNow.getTime(),
-                    dateNow, "1. Создан платеж", this.user.getPhone(), payeePhone, amount);
-            System.out.println(payment.getStatus() + " от " + this.user.getUserName() + ":\n" + payment);
-            return payment;
-        } else {
-            Payment payment = new Payment();
-            System.out.println("Вы не авторизованы в приложении. Без этого отправка платежей невозможна.\n" + payment);
-            return payment;
-        }
+    public PaymentDB payApp(String payeePhone, double amount) {
+        // Создать платеж
+        Date dateNow = new Date();
+        PaymentDB paymentDB = new PaymentDB(this.user.getPhone() + '_' + dateNow.getTime(),
+                  dateNow, "1. Создан платеж", this.user.getPhone(), payeePhone, amount);
+        System.out.println(paymentDB.getStatus() + " от " + this.user.getUserName() + ":\n" + paymentDB);
+        return paymentDB;
     }
-
 
 }

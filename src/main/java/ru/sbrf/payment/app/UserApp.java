@@ -1,30 +1,28 @@
 package ru.sbrf.payment.app;
 
 import lombok.*;
+import ru.sbrf.payment.common.User;
 
-@ToString
+//@ToString
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class UserApp {
-    private String phone = "";
+public class UserApp extends User {
     private String auth = "";
-    private String userName = "";
-    private double balance = -1.0;
 
-    void setPhone(String phone) {
-        this.phone = phone;
+    public UserApp(String auth, String phone, String userName, double balance) {
+        super(phone, userName, balance);
+        this.auth = auth;
     }
+
     void setAuth(String auth) {
         this.auth = auth;
     }
-    void setUserName(String userName) {
-        this.userName = userName;
-    }
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
 
+    @Override
+    public String toString() {
+        return "UserApp(auth=" + this.getAuth() + ", " + super.toString() + ")";
+    }
 }
 

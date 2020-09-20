@@ -1,14 +1,13 @@
-package ru.sbrf.payment.server;
-
-import lombok.*;
+package ru.sbrf.payment.db;
 
 import java.util.Date;
+import lombok.*;
 
 @ToString
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Payment {
+public class PaymentDB {
     private String id = "";
     private Date paymentDate;
     private String status = "";
@@ -16,7 +15,7 @@ public class Payment {
     private String payeePhone = "";
     private double amount = -1.0;
 
-    void setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

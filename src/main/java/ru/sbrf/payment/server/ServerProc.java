@@ -1,39 +1,34 @@
 package ru.sbrf.payment.server;
 
 import ru.sbrf.payment.app.UserApp;
+import ru.sbrf.payment.db.PaymentDB;
 
 public class ServerProc {
-    public Payment paymentDB(Payment payment) {
+    public PaymentDB paymentDB(PaymentDB paymentDB) {
         // Проверка реквизитов платежа по БД платежей и клиентов
-        payment.setStatus("2. Платеж проверен по БД");
-        System.out.println(payment.getStatus() + ":\n" + payment);
-        return payment;
+        paymentDB.setStatus("2. Платеж проверен по БД");
+        System.out.println(paymentDB.getStatus() + ":\n" + paymentDB);
+        return paymentDB;
     }
-    public Payment paymentOAPI(Payment payment) {
+    public PaymentDB paymentOAPI(PaymentDB paymentDB) {
         // Отправка в API сотового оператора
-        payment.setStatus("3. Платеж отправлен в API сотового оператора");
-        System.out.println(payment.getStatus() + ":\n" + payment);
+        paymentDB.setStatus("3. Платеж отправлен в API сотового оператора");
+        System.out.println(paymentDB.getStatus() + ":\n" + paymentDB);
         // Возврат из API сотового оператора
         OperatorAPI operAPI = new OperatorAPI();
-        if (operAPI.procAPI(payment)) {
-            payment.setStatus("4. Получено подтверждение платежа от API сотового оператора");
-            System.out.println(payment.getStatus() + ":\n" + payment);
+        if (operAPI.procAPI(paymentDB)) {
+            paymentDB.setStatus("4. Получено подтверждение платежа от API сотового оператора");
+            System.out.println(paymentDB.getStatus() + ":\n" + paymentDB);
         } else {
-            payment.setStatus("--- API сотового оператора отклонило платеж");
-            System.out.println(payment.getStatus() + ":\n" + payment);
+            paymentDB.setStatus("--- API сотового оператора отклонило платеж");
+            System.out.println(paymentDB.getStatus() + ":\n" + paymentDB);
         }
-        return payment;
-    }
-    public Payment paymentConfirm(Payment payment) {
-        // Сохранение платежа в БД платежей, корректировка остатка в БД клиентов
-        payment.setStatus("5. Платеж проведен в БД");
-        System.out.println(payment.getStatus() + ":\n" + payment);
-        return payment;
+        return paymentDB;
     }
     public void updateBalanceUserApp(double amount, UserApp user) {
         // Корректировка остатка клиента в приложении
         user.setBalance(user.getBalance() - amount);
-        System.out.println("+++ Корректировка суммы остатка клиента в приложении:\n" + user);
+        System.out.println("6. Корректировка суммы остатка клиента в приложении:\n" + user);
     }
 
 }
