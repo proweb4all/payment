@@ -5,6 +5,7 @@ import ru.sbrf.payment.db.PaymentDB;
 import java.util.Date;
 
 import lombok.*;
+import ru.sbrf.payment.db.PaymentStatus;
 import ru.sbrf.payment.db.UsersDB;
 
 @ToString
@@ -20,13 +21,12 @@ public class App {
         // Сделать отсылку на сервер phone и password, возвратить результат проверки boolean
         System.out.println("Попытка авторизации пользователя с т." + phone + "...");
         this.user = usersDB.authUser(phone, password);
-        boolean result = false;
-        if (this.user.getAuth().equals("true")) {
-            result = true;
-            System.out.println("Успешная авторизация: " + this.user.getUserName() + " (т." + this.user.getPhone() +
-                    ") " + this.user.getBalance());
+        boolean result = (this.user.getAuthEnum() == StatusAuth.A1);
+        if (result) {
+            System.out.println(this.user.getAuthEnum().getDescr() + " " + this.user.getUserName() + " (т." + this.user.getPhone() + ") " + this.user.getBalance());
+        } else {
+            System.out.println(this.user.getAuthEnum().getDescr());
         }
-        System.out.println(this.toString());
         return result;
     }
 
@@ -34,8 +34,8 @@ public class App {
         // Создать платеж
         Date dateNow = new Date();
         PaymentDB paymentDB = new PaymentDB(this.user.getPhone() + '_' + dateNow.getTime(),
-                  dateNow, "1. Создан платеж", this.user.getPhone(), payeePhone, amount);
-        System.out.println(paymentDB.getStatus() + " от " + this.user.getUserName() + ":\n" + paymentDB);
+                  dateNow, PaymentStatus.PS1, this.user.getPhone(), payeePhone, amount);
+        System.out.println(paymentDB.getPaymentStatus().getDescr() + " от " + this.user.getUserName() + ":\n" + paymentDB);
         return paymentDB;
     }
 

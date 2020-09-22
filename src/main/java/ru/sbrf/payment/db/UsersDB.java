@@ -1,8 +1,9 @@
 package ru.sbrf.payment.db;
 
 import java.util.HashMap;
+
+import ru.sbrf.payment.app.StatusAuth;
 import ru.sbrf.payment.app.UserApp;
-import ru.sbrf.payment.common.User;
 import lombok.*;
 
 @ToString
@@ -19,17 +20,15 @@ public class UsersDB {
     }
     public UserApp authUser(String phone, String password) {
         UserDB user = usersDB.get(phone);
-        UserApp userFromDB = new UserApp("false");
-//        User userF = user;
-//        System.out.println("Результаты поиска: " + userF);
+        UserApp userFromDB;
         if (user != null) {
             if (user.getPassword().equals(password)) {
-                userFromDB = new UserApp("true", phone, user.getUserName(), user.getBalance());
+                userFromDB = new UserApp(StatusAuth.A1, phone, user.getUserName(), user.getBalance());
             } else {
-                System.out.println("Авторизация не удалась: Неверный пароль.");
+                userFromDB = new UserApp(StatusAuth.A3);
             }
         } else {
-            System.out.println("Авторизация не удалась: Пользователь не найден.");
+            userFromDB = new UserApp(StatusAuth.A2);
         }
         return userFromDB;
     }
@@ -37,8 +36,8 @@ public class UsersDB {
         // Сохранение платежа в БД платежей, корректировка остатка в БД клиентов
         UserDB user = usersDB.get(paymentDB.getPayerPhone());
         user.setBalance(user.getBalance() - paymentDB.getAmount());
-        paymentDB.setStatus("5. Платеж проведен в БД");
-        System.out.println(paymentDB.getStatus() + ":\n" + paymentDB);
+        paymentDB.setPaymentStatus(PaymentStatus.PS5);
+        System.out.println(paymentDB.getPaymentStatus().getDescr() + ":\n" + paymentDB);
         System.out.println("usersDB: " + usersDB);
         return paymentDB;
     }

@@ -7,8 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 
 public class User {
-    private String phone = "";
-    private String userName = "";
+    private String phone = "???";
+    private String userName = "NoName";
     private double balance = -1.0;
 
     public void setPhone(String phone) { this.phone = phone; }
