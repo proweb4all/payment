@@ -1,7 +1,6 @@
 package ru.sbrf.payment.db;
 
 import java.util.HashMap;
-
 import ru.sbrf.payment.app.StatusAuth;
 import ru.sbrf.payment.app.UserApp;
 import lombok.*;
@@ -18,6 +17,7 @@ public class UsersDB {
         usersDB.put("1123456789", new UserDB("1123", "1123456789", "Клава Форточкина", 200.0));
         usersDB.put("2123456789", new UserDB("2123", "2123456789", "Никифор Ляпис-Трубецкой", 300.0));
     }
+
     public UserApp authUser(String phone, String password) {
         UserDB user = usersDB.get(phone);
         UserApp userFromDB;
@@ -32,13 +32,11 @@ public class UsersDB {
         }
         return userFromDB;
     }
-    public PaymentDB paymentConfirm(PaymentDB paymentDB) {
-        // Сохранение платежа в БД платежей, корректировка остатка в БД клиентов
+
+    public boolean paymentToUsersDB(PaymentDB paymentDB) {
+        // Корректировка остатка в БД клиентов
         UserDB user = usersDB.get(paymentDB.getPayerPhone());
         user.setBalance(user.getBalance() - paymentDB.getAmount());
-        paymentDB.setPaymentStatus(PaymentStatus.PS5);
-        System.out.println(paymentDB.getPaymentStatus().getDescr() + ":\n" + paymentDB);
-        System.out.println("usersDB: " + usersDB);
-        return paymentDB;
+        return true;
     }
 }

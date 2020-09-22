@@ -1,9 +1,8 @@
 package ru.sbrf.payment.app;
 
-import lombok.*;
 import ru.sbrf.payment.common.User;
 
-//@ToString
+import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,9 +15,9 @@ public class UserApp extends User {
         this.authEnum = authEnum;
     }
 
-    void setAuthEnum(StatusAuth authEnum) {
-        this.authEnum = authEnum;
-    }
+//    void setAuthEnum(StatusAuth authEnum) {
+//        this.authEnum = authEnum;
+//    }
 
     @Override
     public String toString() {

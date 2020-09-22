@@ -3,7 +3,6 @@ package ru.sbrf.payment.db;
 import ru.sbrf.payment.common.User;
 import lombok.*;
 
-//@ToString
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
