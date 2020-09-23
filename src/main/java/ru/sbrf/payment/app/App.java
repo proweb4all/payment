@@ -19,7 +19,7 @@ public class App {
 
     public boolean authUser(String phone, String password, UsersDB usersDB) {
         // Сделать отсылку на сервер phone и password, возвратить результат проверки boolean
-        System.out.println("Попытка авторизации пользователя с т." + phone + "...");
+        //System.out.println("Попытка авторизации пользователя с т." + phone + "...");
         this.user = usersDB.authUser(phone, password);
         boolean result = (this.user.getAuthEnum() == StatusAuth.A1);
         if (result) {
@@ -35,45 +35,45 @@ public class App {
         Date dateNow = new Date();
         PaymentDB paymentDB = new PaymentDB(this.user.getPhone() + '_' + dateNow.getTime(),
                   dateNow, PaymentStatus.PS1, this.user.getPhone(), payeePhone, amount);
-        System.out.println(paymentDB.getPaymentStatus().getDescr() + " от " + this.user.getUserName() + ":\n" + paymentDB);
+        System.out.println(paymentDB.getPaymentStatus().getDescr() + " от " + this.user.getUserName());// + ":\n" + paymentDB);
         if (checkPaymentDB()) {
             paymentDB.setPaymentStatus(PaymentStatus.PS2);
-            System.out.println(paymentDB.getPaymentStatus().getDescr() + ":\n" + paymentDB);
+            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
         } else {
             paymentDB.setPaymentStatus(PaymentStatus.PS12);
-            System.out.println(paymentDB.getPaymentStatus().getDescr() + ":\n" + paymentDB);
+            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
             return false;
         }
         if (paymentToAPI(paymentDB)) {
             paymentDB.setPaymentStatus(PaymentStatus.PS3);
-            System.out.println(paymentDB.getPaymentStatus().getDescr() + ":\n" + paymentDB);
+            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
         } else {
             paymentDB.setPaymentStatus(PaymentStatus.PS13);
-            System.out.println(paymentDB.getPaymentStatus().getDescr() + ":\n" + paymentDB);
+            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
             return false;
         }
         if (usersDB.paymentToUsersDB(paymentDB)) {
             paymentDB.setPaymentStatus(PaymentStatus.PS4);
-            System.out.println(paymentDB.getPaymentStatus().getDescr() + ":\n" + paymentDB);
+            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
         } else {
             paymentDB.setPaymentStatus(PaymentStatus.PS14);
-            System.out.println(paymentDB.getPaymentStatus().getDescr() + ":\n" + paymentDB);
+            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
             //return false;
         }
         if (updatePaymentsDB(paymentDB)) {
            paymentDB.setPaymentStatus(PaymentStatus.PS5);
-            System.out.println(paymentDB.getPaymentStatus().getDescr() + ":\n" + paymentDB);
+            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
         } else {
             paymentDB.setPaymentStatus(PaymentStatus.PS15);
-            System.out.println(paymentDB.getPaymentStatus().getDescr() + ":\n" + paymentDB);
+            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
             //return false;
         }
         if (updateBalanceUserApp(paymentDB.getAmount(), this.getUser())) {
-            System.out.println(PaymentStatus.PS6.getDescr() + ":\n" + user);
+            System.out.println(PaymentStatus.PS6.getDescr());// + ":\n" + user);
         } else {
-            System.out.println(PaymentStatus.PS16.getDescr() + ":\n" + user);
+            System.out.println(PaymentStatus.PS16.getDescr());// + ":\n" + user);
         }
-        System.out.printf("=== payApp - Платеж №%s от %s (т.%s) пользователю т.%s на сумму %.2fруб. успешно проведен! ===\n",
+        System.out.printf("=== Платеж №%s от %s (т.%s) пользователю т.%s на сумму %.2fруб. успешно проведен! ===\n",
                    paymentDB.getId(), this.getUser().getUserName(), paymentDB.getPayerPhone(), paymentDB.getPayeePhone(), paymentDB.getAmount());
         return true;
     }
