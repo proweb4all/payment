@@ -4,6 +4,7 @@ import java.util.Date;
 import ru.sbrf.payment.common.Settings;
 import ru.sbrf.payment.db.PaymentDB;
 import ru.sbrf.payment.db.PaymentStatus;
+import ru.sbrf.payment.db.PaymentsDB;
 import ru.sbrf.payment.db.UsersDB;
 import ru.sbrf.payment.server.OperatorAPI;
 
@@ -16,10 +17,14 @@ import lombok.*;
 public class App {
     private Settings settings = new Settings();
     private UserApp user = new UserApp();
+    private UsersDB usersDB = new UsersDB();
+    private PaymentsDB paymentsDB = new PaymentsDB();
 
     public boolean authUser(String phone, String password, UsersDB usersDB) {
         // Сделать отсылку на сервер phone и password, возвратить результат проверки boolean
         //System.out.println("Попытка авторизации пользователя с т." + phone + "...");
+        usersDB.init();
+        paymentsDB.init();
         this.user = usersDB.authUser(phone, password);
         boolean result = (this.user.getAuthEnum() == StatusAuth.A1);
         if (result) {
@@ -61,7 +66,8 @@ public class App {
             //return false;
         }
         if (updatePaymentsDB(paymentDB)) {
-           paymentDB.setPaymentStatus(PaymentStatus.PS5);
+            paymentDB.setPaymentStatus(PaymentStatus.PS5);
+            paymentsDB.addPaymentToDB(paymentDB);
             System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
         } else {
             paymentDB.setPaymentStatus(PaymentStatus.PS15);
@@ -73,7 +79,7 @@ public class App {
         } else {
             System.out.println(PaymentStatus.PS16.getDescr());// + ":\n" + user);
         }
-        System.out.printf("=== Платеж №%s от %s (т.%s) пользователю т.%s на сумму %.2fруб. успешно проведен! ===\n",
+        System.out.printf("=== Успешно проведен платеж №%s от %s (т.%s) пользователю т.%s на сумму %.2fруб. ===\n",
                    paymentDB.getId(), this.getUser().getUserName(), paymentDB.getPayerPhone(), paymentDB.getPayeePhone(), paymentDB.getAmount());
         return true;
     }

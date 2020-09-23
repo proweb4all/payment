@@ -1,17 +1,13 @@
 package ru.sbrf.payment;
 
-import ru.sbrf.payment.app.App;
-import ru.sbrf.payment.app.StatusAuth;
-import ru.sbrf.payment.db.UsersDB;
-
 import java.io.Console;
 import java.io.IOException;
 import java.util.Scanner;
+import ru.sbrf.payment.app.App;
+import ru.sbrf.payment.app.StatusAuth;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
-        UsersDB usersDB = new UsersDB();
-        usersDB.init();
         App app = new App();
         int code = 11;
         boolean auth = false;
@@ -47,30 +43,35 @@ public class Main {
 //                    char passwordChars[] = console.readPassword();
 //                    String pass = new String(passwordChars);
                     String pass = in.nextLine();
-                    System.out.println("phone:" + phone +", pass: " + pass);
-                    app.authUser(phone, pass, usersDB);
+                    //System.out.println("phone:" + phone +", pass: " + pass);
+                    app.authUser(phone, pass, app.getUsersDB());
                     break;
                 case 2:
-                    System.out.print("Введите номер телефона получателя платежа (10 цыфр) \"1122334455\": ");
+                    System.out.print("Введите номер телефона получателя платежа (10 цифр) \"1122334455\": ");
                     String payeePhone = in.nextLine();
                     System.out.print("Введите сумму платежа в пределах Вашего остатка: ");
                     double amount = 0.0;
                     do {
                         if (in.hasNextDouble()) {
                             amount = in.nextDouble();
-                            break;
+                            if (amount <= 0 || amount > app.getUser().getBalance()) {
+                                System.out.print("Неверно! Введите сумму больше нуля в пределах Вашего остатка: ");
+                                in.nextLine();
+                            } else {
+                                break;
+                            }
                         } else {
                             System.out.print("Вы не ввели число. Попробуйте еще раз: ");
                             in.nextLine();
                         }
                     } while (true);
-                    app.payApp(payeePhone, amount, usersDB);
+                    app.payApp(payeePhone, amount, app.getUsersDB());
                     break;
                 case 0:
                     System.out.println("====================================\nВы вышли из приложения. До свидания!\n====================================");
                     break;
                 default:
-                    //System.out.print("Введите правильное значение...");
+                    System.out.print("Введите правильное значение...");
                     break;
             }
             System.out.println("\n");
