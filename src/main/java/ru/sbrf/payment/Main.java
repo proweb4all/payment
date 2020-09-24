@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.util.Scanner;
 import ru.sbrf.payment.app.App;
 import ru.sbrf.payment.app.StatusAuth;
+import ru.sbrf.payment.common.SomeException;
+import ru.sbrf.payment.common.Validation;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         App app = new App();
+        app.init();
         int code = 11;
         boolean auth = false;
         String inStr;
@@ -20,11 +23,12 @@ public class Main {
             auth = (app.getUser().getAuthEnum() == StatusAuth.A1);
             if (auth) {
                 System.out.println("+++ Вы авторизованы как " + app.getUser().getUserName() + ", т." + app.getUser().getPhone() + ", остаток средств " + app.getUser().getBalance() + "руб.");
-                System.out.println("==============================================\nВыберите и введите номер дальнейшего действия: ");
+                System.out.println("==============================================\nВведите номер дальнейшего действия: ");
+                System.out.println("1 - авторизация в приложении");
                 System.out.println("2 - оплата мобильного телефона");
             } else {
                 System.out.println("!-- Вы не авторизованы в приложении");
-                System.out.println("==============================================\nВыберите и введите номер дальнейшего действия: ");
+                System.out.println("==============================================\nВведите номер дальнейшего действия: ");
                 System.out.println("1 - авторизация в приложении");
             }
             System.out.print("0 - выход\n> ");
@@ -36,36 +40,56 @@ public class Main {
             switch (code) {
                 case 1:
                     System.out.print("Введите свой номер телефона \"1123456789\": ");
-                    String phone = in.nextLine();
+                    String phone, pass;
+                    try {
+                        phone = Validation.checkPhone(in.nextLine());
+                    } catch (SomeException e) {
+                        System.out.println(e);
+                        break;
+                    }
                     System.out.print("Введите пароль: ");
 //                    // Вариант сокрытия символов пароля при вводе с консоли. Не работает из-под IDE.
 //                    Console console = System.console();
 //                    char passwordChars[] = console.readPassword();
 //                    String pass = new String(passwordChars);
-                    String pass = in.nextLine();
-                    //System.out.println("phone:" + phone +", pass: " + pass);
+                    try {
+                        pass = Validation.checkPass(in.nextLine());
+                    } catch (SomeException e) {
+                        System.out.println(e);
+                        break;
+                    }
                     app.authUser(phone, pass, app.getUsersDB());
                     break;
                 case 2:
-                    System.out.print("Введите номер телефона получателя платежа (10 цифр) \"1122334455\": ");
-                    String payeePhone = in.nextLine();
-                    System.out.print("Введите сумму платежа в пределах Вашего остатка: ");
-                    double amount = 0.0;
-                    do {
-                        if (in.hasNextDouble()) {
-                            amount = in.nextDouble();
-                            if (amount <= 0 || amount > app.getUser().getBalance()) {
-                                System.out.print("Неверно! Введите сумму больше нуля в пределах Вашего остатка: ");
-                                in.nextLine();
-                            } else {
-                                break;
-                            }
-                        } else {
-                            System.out.print("Вы не ввели число. Попробуйте еще раз: ");
-                            in.nextLine();
+                    if (auth) {
+                        System.out.print("Введите номер телефона получателя платежа (10 цифр) \"1122334455\": ");
+                        String payeePhone;
+                        try {
+                            payeePhone = Validation.checkPhone(in.nextLine());
+                        } catch (SomeException e) {
+                            System.out.println(e);
+                            break;
                         }
-                    } while (true);
-                    app.payApp(payeePhone, amount, app.getUsersDB());
+                        System.out.print("Введите сумму платежа в пределах Вашего остатка (0 - отмена): ");
+                        double amount = 0.0;
+                        do {
+                            try {
+                                amount = Validation.checkAmount(in.nextLine(), app.getUser().getBalance());
+                                break;
+                            } catch (SomeException e) {
+                                System.out.println(e);
+                            } catch (NumberFormatException e) {
+                                System.out.println("Ошибка. Вы не ввели число. Введите сумму платежа в пределах Вашего остатка (0 - отмена): ");
+                            }
+                        } while (true);
+                        if (amount != 0) {
+                            app.payApp(payeePhone, amount, app.getUsersDB());
+                        } else {
+                            System.out.println("--- Вы отменили платеж.");
+                        }
+                    } else {
+                        System.out.println("Введите правильное значение...");
+                    }
                     break;
                 case 0:
                     System.out.println("====================================\nВы вышли из приложения. До свидания!\n====================================");
@@ -74,7 +98,7 @@ public class Main {
                     System.out.print("Введите правильное значение...");
                     break;
             }
-            System.out.println("\n");
+            System.out.println();
         } while (code != 0);
         in.close();
     }

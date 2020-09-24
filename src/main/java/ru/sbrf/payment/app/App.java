@@ -20,11 +20,14 @@ public class App {
     private UsersDB usersDB = new UsersDB();
     private PaymentsDB paymentsDB = new PaymentsDB();
 
+    public void init() {
+        usersDB.init();
+        paymentsDB.init();
+    }
+
     public boolean authUser(String phone, String password, UsersDB usersDB) {
         // Сделать отсылку на сервер phone и password, возвратить результат проверки boolean
         //System.out.println("Попытка авторизации пользователя с т." + phone + "...");
-        usersDB.init();
-        paymentsDB.init();
         this.user = usersDB.authUser(phone, password);
         boolean result = (this.user.getAuthEnum() == StatusAuth.A1);
         if (result) {

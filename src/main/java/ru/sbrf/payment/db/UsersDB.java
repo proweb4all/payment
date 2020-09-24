@@ -13,9 +13,9 @@ import lombok.*;
 public class UsersDB {
     HashMap<String, UserDB> usersDB = new HashMap<>();
     public void init() {
-        usersDB.put("0123456789", new UserDB("0123", "0123456789", "Ваня Ветров", 100.0));
-        usersDB.put("1123456789", new UserDB("1111", "1123456789", "Клава Форточкина", 200.0));
-        usersDB.put("2123456789", new UserDB("2123", "2123456789", "Никифор Ляпис-Трубецкой", 300.0));
+        usersDB.put("0123456789", new UserDB("000000", "0123456789", "Ваня Ветров", 100.0));
+        usersDB.put("1123456789", new UserDB("111111", "1123456789", "Клава Форточкина", 200.0));
+        usersDB.put("2123456789", new UserDB("222222", "2123456789", "Никифор Ляпис-Трубецкой", 300.0));
     }
 
     public UserApp authUser(String phone, String password) {
