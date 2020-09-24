@@ -2,7 +2,7 @@ package ru.sbrf.payment.app;
 
 import java.util.Date;
 import ru.sbrf.payment.common.Settings;
-import ru.sbrf.payment.db.PaymentDB;
+import ru.sbrf.payment.db.Payment;
 import ru.sbrf.payment.db.PaymentStatus;
 import ru.sbrf.payment.db.PaymentsDB;
 import ru.sbrf.payment.db.UsersDB;
@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 
 public class App {
     private Settings settings = new Settings();
@@ -41,63 +41,63 @@ public class App {
     public boolean payApp(String payeePhone, double amount, UsersDB usersDB) {
         // Создать платеж
         Date dateNow = new Date();
-        PaymentDB paymentDB = new PaymentDB(this.user.getPhone() + '_' + dateNow.getTime(),
-                  dateNow, PaymentStatus.PS1, this.user.getPhone(), payeePhone, amount);
-        System.out.println(paymentDB.getPaymentStatus().getDescr() + " от " + this.user.getUserName());// + ":\n" + paymentDB);
-        if (checkPaymentDB()) {
-            paymentDB.setPaymentStatus(PaymentStatus.PS2);
-            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
+        Payment payment = new Payment(PaymentsDB.createPaymentID(this.user.getPhone(), dateNow),
+                this.user.getPhone(), this.user.getAccount(), dateNow, PaymentStatus.PS1, payeePhone, amount);
+        System.out.println(payment.getPaymentStatus().getDescr() + " от " + this.user.getUserName());// + ":\n" + payment);
+        if (checkPayment(payment.getId())) {
+            payment.setPaymentStatus(PaymentStatus.PS2);
+            System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
         } else {
-            paymentDB.setPaymentStatus(PaymentStatus.PS12);
-            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
+            payment.setPaymentStatus(PaymentStatus.PS12);
+            System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
             return false;
         }
-        if (paymentToAPI(paymentDB)) {
-            paymentDB.setPaymentStatus(PaymentStatus.PS3);
-            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
+        if (paymentToAPI(payment)) {
+            payment.setPaymentStatus(PaymentStatus.PS3);
+            System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
         } else {
-            paymentDB.setPaymentStatus(PaymentStatus.PS13);
-            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
+            payment.setPaymentStatus(PaymentStatus.PS13);
+            System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
             return false;
         }
-        if (usersDB.paymentToUsersDB(paymentDB)) {
-            paymentDB.setPaymentStatus(PaymentStatus.PS4);
-            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
+        if (usersDB.paymentToUsersDB(payment)) {
+            payment.setPaymentStatus(PaymentStatus.PS4);
+            System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
         } else {
-            paymentDB.setPaymentStatus(PaymentStatus.PS14);
-            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
+            payment.setPaymentStatus(PaymentStatus.PS14);
+            System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
             //return false;
         }
-        if (updatePaymentsDB(paymentDB)) {
-            paymentDB.setPaymentStatus(PaymentStatus.PS5);
-            paymentsDB.addPaymentToDB(paymentDB);
-            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
+        if (updatePaymentsDB(payment)) {
+            payment.setPaymentStatus(PaymentStatus.PS5);
+            paymentsDB.addPaymentToDB(payment);
+            System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
         } else {
-            paymentDB.setPaymentStatus(PaymentStatus.PS15);
-            System.out.println(paymentDB.getPaymentStatus().getDescr());// + ":\n" + paymentDB);
+            payment.setPaymentStatus(PaymentStatus.PS15);
+            System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
             //return false;
         }
-        if (updateBalanceUserApp(paymentDB.getAmount(), this.getUser())) {
+        if (updateBalanceUserApp(payment.getAmount(), this.getUser())) {
             System.out.println(PaymentStatus.PS6.getDescr());// + ":\n" + user);
         } else {
             System.out.println(PaymentStatus.PS16.getDescr());// + ":\n" + user);
         }
         System.out.printf("=== Успешно проведен платеж №%s от %s (т.%s) пользователю т.%s на сумму %.2fруб. ===\n",
-                   paymentDB.getId(), this.getUser().getUserName(), paymentDB.getPayerPhone(), paymentDB.getPayeePhone(), paymentDB.getAmount());
+                   payment.getId(), this.getUser().getUserName(), payment.getPayerPhone(), payment.getPayeePhone(), payment.getAmount());
         return true;
     }
 
-    boolean checkPaymentDB() {
-        // Проверка реквизитов платежа по БД платежей и клиентов
-        return true;
+    boolean checkPayment(String paymentID) {
+        // Проверка реквизитов платежа по БД платежей
+        return paymentsDB.checkPaymentID(paymentID);
 //        return false;
     }
-    boolean paymentToAPI(PaymentDB paymentDB) {
+    boolean paymentToAPI(Payment payment) {
         // Отправка и возврат из API сотового оператора
         OperatorAPI operAPI = new OperatorAPI();
-        return operAPI.procAPI(paymentDB);
+        return operAPI.procAPI(payment);
     }
-    boolean updatePaymentsDB(PaymentDB paymentDB) {
+    boolean updatePaymentsDB(Payment payment) {
         // Запись платежа в БД платежей
         return true;
 //        return false;

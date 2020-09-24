@@ -39,7 +39,7 @@ public class Main {
             code = Character.getNumericValue(inStr.charAt(0));
             switch (code) {
                 case 1:
-                    System.out.print("Введите свой номер телефона \"1123456789\": ");
+                    System.out.print("Введите свой номер телефона (10 цифр): ");
                     String phone, pass;
                     try {
                         phone = Validation.checkPhone(in.nextLine());
@@ -62,7 +62,7 @@ public class Main {
                     break;
                 case 2:
                     if (auth) {
-                        System.out.print("Введите номер телефона получателя платежа (10 цифр) \"1122334455\": ");
+                        System.out.print("Введите номер телефона получателя платежа (10 цифр): ");
                         String payeePhone;
                         try {
                             payeePhone = Validation.checkPhone(in.nextLine());

@@ -10,8 +10,8 @@ import lombok.*;
 public class UserApp extends User {
     private StatusAuth authEnum = StatusAuth.A0;
 
-    public UserApp(StatusAuth authEnum, String phone, String userName, double balance) {
-        super(phone, userName, balance);
+    public UserApp(StatusAuth authEnum, String phone, String userName, String account, double balance) {
+        super(phone, userName, account, balance);
         this.authEnum = authEnum;
     }
 

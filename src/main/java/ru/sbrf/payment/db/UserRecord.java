@@ -7,10 +7,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class UserDB extends User {
+public class UserRecord extends User {
     private String password = "";
-    public UserDB(String password, String phone, String userName, double balance) {
-        super(phone, userName, balance);
+    public UserRecord(String password, String phone, String userName, String account, double balance) {
+        super(phone, userName, account, balance);
         this.password = password;
     }
     @Override

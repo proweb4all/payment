@@ -7,11 +7,13 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentDB {
+
+public class Payment {
     private String id = "";
-    private Date paymentDate;
-    private PaymentStatus paymentStatus = PaymentStatus.PS0;
     private String payerPhone = "";
+    private String account = "";
+    private Date paymentDate = new Date();
+    private PaymentStatus paymentStatus = PaymentStatus.PS0;
     private String payeePhone = "";
     private double amount = -1.0;
 

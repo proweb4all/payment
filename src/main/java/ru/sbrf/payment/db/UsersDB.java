@@ -5,25 +5,26 @@ import ru.sbrf.payment.app.StatusAuth;
 import ru.sbrf.payment.app.UserApp;
 import lombok.*;
 
-@ToString
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+//@ToString
+//@Getter
+//@NoArgsConstructor
+//@AllArgsConstructor
 
 public class UsersDB {
-    HashMap<String, UserDB> usersDB = new HashMap<>();
+    private HashMap<String, UserRecord> usersDB = new HashMap<>();
+
     public void init() {
-        usersDB.put("0123456789", new UserDB("000000", "0123456789", "Ваня Ветров", 100.0));
-        usersDB.put("1123456789", new UserDB("111111", "1123456789", "Клава Форточкина", 200.0));
-        usersDB.put("2123456789", new UserDB("222222", "2123456789", "Никифор Ляпис-Трубецкой", 300.0));
+        usersDB.put("9101111111", new UserRecord("111111", "9101111111", "Ваня Ветров", "XXXXX810X53001111111", 300.0));
+        usersDB.put("9102222222", new UserRecord("222222", "9102222222", "Клава Форточкина", "XXXXX810X53002222222", 400.0));
+        usersDB.put("9103333333", new UserRecord("333333", "9103333333", "Никифор Ляпис-Трубецкой", "XXXXX810X53003333333", 500.0));
     }
 
     public UserApp authUser(String phone, String password) {
-        UserDB user = usersDB.get(phone);
+        UserRecord user = usersDB.get(phone);
         UserApp userFromDB;
         if (user != null) {
             if (user.getPassword().equals(password)) {
-                userFromDB = new UserApp(StatusAuth.A1, phone, user.getUserName(), user.getBalance());
+                userFromDB = new UserApp(StatusAuth.A1, phone, user.getUserName(), user.getAccount(), user.getBalance());
             } else {
                 userFromDB = new UserApp(StatusAuth.A3);
             }
@@ -33,10 +34,10 @@ public class UsersDB {
         return userFromDB;
     }
 
-    public boolean paymentToUsersDB(PaymentDB paymentDB) {
+    public boolean paymentToUsersDB(Payment payment) {
         // Корректировка остатка в БД клиентов
-        UserDB user = usersDB.get(paymentDB.getPayerPhone());
-        user.setBalance(user.getBalance() - paymentDB.getAmount());
+        UserRecord user = usersDB.get(payment.getPayerPhone());
+        user.setBalance(user.getBalance() - payment.getAmount());
         return true;
     }
 }
