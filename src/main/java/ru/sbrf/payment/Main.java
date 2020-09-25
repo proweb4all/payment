@@ -7,8 +7,12 @@ import ru.sbrf.payment.app.App;
 import ru.sbrf.payment.app.StatusAuth;
 import ru.sbrf.payment.common.SomeException;
 import ru.sbrf.payment.common.Validation;
+import ru.sbrf.payment.common.ValidationStrFunc;
 
 public class Main {
+    static String validationStr(ValidationStrFunc f, String s) throws SomeException {
+        return f.func(s);
+    }
     public static void main(String[] args) throws IOException, InterruptedException {
         App app = new App();
         app.init();
@@ -42,7 +46,8 @@ public class Main {
                     System.out.print("Введите свой номер телефона (10 цифр): ");
                     String phone, pass;
                     try {
-                        phone = Validation.checkPhone(in.nextLine());
+//                        phone = Validation.checkPhone(in.nextLine());
+                        phone = validationStr(Validation::checkPhone, in.nextLine());
                     } catch (SomeException e) {
                         System.out.println(e);
                         break;
@@ -53,7 +58,8 @@ public class Main {
 //                    char passwordChars[] = console.readPassword();
 //                    String pass = new String(passwordChars);
                     try {
-                        pass = Validation.checkPass(in.nextLine());
+//                        pass = Validation.checkPass(in.nextLine());
+                        pass = validationStr(Validation::checkPass, in.nextLine());
                     } catch (SomeException e) {
                         System.out.println(e);
                         break;
@@ -65,7 +71,8 @@ public class Main {
                         System.out.print("Введите номер телефона получателя платежа (10 цифр): ");
                         String payeePhone;
                         try {
-                            payeePhone = Validation.checkPhone(in.nextLine());
+//                            payeePhone = Validation.checkPhone(in.nextLine());
+                            payeePhone = validationStr(Validation::checkPhone, in.nextLine());
                         } catch (SomeException e) {
                             System.out.println(e);
                             break;
