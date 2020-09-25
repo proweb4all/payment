@@ -10,7 +10,7 @@ import ru.sbrf.payment.common.Validation;
 import ru.sbrf.payment.common.ValidationStrFunc;
 
 public class Main {
-    static String validationStr(ValidationStrFunc f, String s) throws SomeException {
+    static <T> String validationStr(ValidationStrFunc<T> f, T s) throws SomeException {
         return f.func(s);
     }
     public static void main(String[] args) throws IOException, InterruptedException {
