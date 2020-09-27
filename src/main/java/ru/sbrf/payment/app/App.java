@@ -100,8 +100,8 @@ public class App {
         }
         System.out.printf("=== Успешно проведен платеж №%s от %s (т.%s) пользователю т.%s на сумму %.2fруб. ===\n",
                    payment.getId(), this.getUser().getUserName(), payment.getPayerPhone(), payment.getPayeePhone(), payment.getAmount());
-        log.info("=== Успешно проведен платеж №%s от %s (т.%s) пользователю т.%s на сумму %.2fруб. ===",
-                payment.getId(), this.getUser().getUserName(), payment.getPayerPhone(), payment.getPayeePhone(), payment.getAmount());
+        log.info("=== Успешно проведен платеж №" + payment.getId() + " от " + this.getUser().getUserName() + " (т." + payment.getPayerPhone()
+                + ") пользователю (т." + payment.getPayeePhone() + ") на сумму " + payment.getAmount() + "руб. ===");
         return true;
     }
 
