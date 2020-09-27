@@ -1,6 +1,8 @@
 package ru.sbrf.payment.app;
 
 import java.util.Date;
+
+import lombok.extern.slf4j.Slf4j;
 import ru.sbrf.payment.common.Settings;
 import ru.sbrf.payment.db.Payment;
 import ru.sbrf.payment.db.PaymentStatus;
@@ -13,6 +15,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 //@AllArgsConstructor
+@Slf4j
 
 public class App {
     private Settings settings = new Settings();
@@ -27,13 +30,15 @@ public class App {
 
     public boolean authUser(String phone, String password, UsersDB usersDB) {
         // Сделать отсылку на сервер phone и password, возвратить результат проверки boolean
-        //System.out.println("Попытка авторизации пользователя с т." + phone + "...");
+        log.info("Попытка авторизации пользователя с т." + phone + "...");
         this.user = usersDB.authUser(phone, password);
         boolean result = (this.user.getAuthEnum() == StatusAuth.A1);
         if (result) {
             System.out.println(this.user.getAuthEnum().getDescr() + " " + this.user.getUserName() + " (т." + this.user.getPhone() + ") " + this.user.getBalance());
+            log.info(this.user.getAuthEnum().getDescr() + " " + this.user.getUserName() + " (т." + this.user.getPhone() + ") " + this.user.getBalance());
         } else {
             System.out.println(this.user.getAuthEnum().getDescr());
+            log.info(this.user.getAuthEnum().getDescr());
         }
         return result;
     }
@@ -44,46 +49,59 @@ public class App {
         Payment payment = new Payment(PaymentsDB.createPaymentID(this.user.getPhone(), dateNow),
                 this.user.getPhone(), this.user.getAccount(), dateNow, PaymentStatus.PS1, payeePhone, amount);
         System.out.println(payment.getPaymentStatus().getDescr() + " от " + this.user.getUserName());// + ":\n" + payment);
+        log.info(payment.getPaymentStatus().getDescr());
         if (checkPayment(payment.getId())) {
             payment.setPaymentStatus(PaymentStatus.PS2);
             System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            log.info(payment.getPaymentStatus().getDescr());
         } else {
             payment.setPaymentStatus(PaymentStatus.PS12);
             System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            log.info(payment.getPaymentStatus().getDescr());
             return false;
         }
         if (paymentToAPI(payment)) {
             payment.setPaymentStatus(PaymentStatus.PS3);
             System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            log.info(payment.getPaymentStatus().getDescr());
         } else {
             payment.setPaymentStatus(PaymentStatus.PS13);
             System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            log.info(payment.getPaymentStatus().getDescr());
             return false;
         }
         if (usersDB.paymentToUsersDB(payment)) {
             payment.setPaymentStatus(PaymentStatus.PS4);
             System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            log.info(payment.getPaymentStatus().getDescr());
         } else {
             payment.setPaymentStatus(PaymentStatus.PS14);
             System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            log.info(payment.getPaymentStatus().getDescr());
             //return false;
         }
         if (updatePaymentsDB(payment)) {
             payment.setPaymentStatus(PaymentStatus.PS5);
             paymentsDB.addPaymentToDB(payment);
             System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            log.info(payment.getPaymentStatus().getDescr());
         } else {
             payment.setPaymentStatus(PaymentStatus.PS15);
             System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            log.info(payment.getPaymentStatus().getDescr());
             //return false;
         }
         if (updateBalanceUserApp(payment.getAmount(), this.getUser())) {
             System.out.println(PaymentStatus.PS6.getDescr());// + ":\n" + user);
+            log.info(PaymentStatus.PS6.getDescr());
         } else {
             System.out.println(PaymentStatus.PS16.getDescr());// + ":\n" + user);
+            log.info(PaymentStatus.PS16.getDescr());
         }
         System.out.printf("=== Успешно проведен платеж №%s от %s (т.%s) пользователю т.%s на сумму %.2fруб. ===\n",
                    payment.getId(), this.getUser().getUserName(), payment.getPayerPhone(), payment.getPayeePhone(), payment.getAmount());
+        log.info("=== Успешно проведен платеж №%s от %s (т.%s) пользователю т.%s на сумму %.2fруб. ===",
+                payment.getId(), this.getUser().getUserName(), payment.getPayerPhone(), payment.getPayeePhone(), payment.getAmount());
         return true;
     }
 

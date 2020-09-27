@@ -1,14 +1,17 @@
 package ru.sbrf.payment;
 
-import java.io.Console;
+//import java.io.Console;
 import java.io.IOException;
 import java.util.Scanner;
+
+import lombok.extern.slf4j.Slf4j;
 import ru.sbrf.payment.app.App;
 import ru.sbrf.payment.app.StatusAuth;
 import ru.sbrf.payment.common.SomeException;
 import ru.sbrf.payment.common.Validation;
 import ru.sbrf.payment.common.ValidationStrFunc;
 
+@Slf4j
 public class Main {
     static <T> String validationStr(ValidationStrFunc<T> f, T s) throws SomeException {
         return f.func(s);
@@ -16,6 +19,8 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         App app = new App();
         app.init();
+        log.info("=====================================================");
+        log.info("☎☎☎ Приложение Payment запущено ");
         int code = 11;
         boolean auth = false;
         String inStr;
@@ -41,6 +46,7 @@ public class Main {
                 if (inStr.length() > 0) { break; }
             } while (true);
             code = Character.getNumericValue(inStr.charAt(0));
+            log.info("Выбран пункт меню: " + code);
             switch (code) {
                 case 1:
                     System.out.print("Введите свой номер телефона (10 цифр): ");
@@ -50,6 +56,7 @@ public class Main {
                         phone = validationStr(Validation::checkPhone, in.nextLine());
                     } catch (SomeException e) {
                         System.out.println(e);
+                        log.info(String.valueOf(e));
                         break;
                     }
                     System.out.print("Введите пароль: ");
@@ -62,6 +69,7 @@ public class Main {
                         pass = validationStr(Validation::checkPass, in.nextLine());
                     } catch (SomeException e) {
                         System.out.println(e);
+                        log.info(String.valueOf(e));
                         break;
                     }
                     app.authUser(phone, pass, app.getUsersDB());
@@ -75,6 +83,7 @@ public class Main {
                             payeePhone = validationStr(Validation::checkPhone, in.nextLine());
                         } catch (SomeException e) {
                             System.out.println(e);
+                            log.info(String.valueOf(e));
                             break;
                         }
                         System.out.print("Введите сумму платежа в пределах Вашего остатка (0 - отмена): ");
@@ -85,21 +94,26 @@ public class Main {
                                 break;
                             } catch (SomeException e) {
                                 System.out.println(e);
+                                log.info(String.valueOf(e));
                             } catch (NumberFormatException e) {
                                 System.out.println("Ошибка. Вы не ввели число. Введите сумму платежа в пределах Вашего остатка (0 - отмена): ");
+                                log.info("Ошибка ввода суммы платежа: не введено число.");
                             }
                         } while (true);
                         if (amount != 0) {
                             app.payApp(payeePhone, amount, app.getUsersDB());
                         } else {
                             System.out.println("--- Вы отменили платеж.");
+                            log.info("--- Пользователь отменил платеж.");
                         }
                     } else {
                         System.out.println("Введите правильное значение...");
                     }
                     break;
                 case 0:
-                    System.out.println("====================================\nВы вышли из приложения. До свидания!\n====================================");
+                    System.out.println("====================================");
+                    System.out.println("Вы вышли из приложения. До свидания!");
+                    System.out.println("====================================");
                     break;
                 default:
                     System.out.print("Введите правильное значение...");
@@ -108,5 +122,7 @@ public class Main {
             System.out.println();
         } while (code != 0);
         in.close();
+        log.info("☎☎☎ Приложение Payment закрыто");
+        log.info("=====================================================");
     }
 }

@@ -1,5 +1,6 @@
 package ru.sbrf.payment.app;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.sbrf.payment.common.User;
 
 import lombok.*;

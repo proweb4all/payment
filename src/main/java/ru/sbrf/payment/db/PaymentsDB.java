@@ -24,13 +24,13 @@ public class PaymentsDB {
 
     public boolean addPaymentToDB(Payment payment) {
         paymentsDB.put(payment.getId(), payment);
-        System.out.println("БД платежей - PaymentsDB:");
-        for (HashMap.Entry<String, Payment> elem : paymentsDB.entrySet())
-            { System.out.println(elem.getKey() + ": " + elem.getValue()); }
+//        System.out.println("БД платежей - PaymentsDB:");
+//        for (HashMap.Entry<String, Payment> elem : paymentsDB.entrySet())
+//            { System.out.println(elem.getKey() + ": " + elem.getValue()); }
         return true;
     }
 
     public boolean checkPaymentID(String id) {
-        return (paymentsDB.get(id) == null) ? true : false;
+        return (paymentsDB.get(id) == null);
     }
 }
