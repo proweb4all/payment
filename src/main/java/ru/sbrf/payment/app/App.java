@@ -14,13 +14,12 @@ import lombok.*;
 @ToString
 @Getter
 @NoArgsConstructor
-//@AllArgsConstructor
 @Slf4j
 
 public class App {
     private Settings settings = new Settings();
     private UserApp user = new UserApp();
-    private UsersDB usersDB = new UsersDB();
+    protected UsersDB usersDB = new UsersDB();
     private PaymentsDB paymentsDB = new PaymentsDB();
 
     public void init() {
@@ -82,7 +81,6 @@ public class App {
         }
         if (updatePaymentsDB(payment)) {
             payment.setPaymentStatus(PaymentStatus.PS5);
-            paymentsDB.addPaymentToDB(payment);
             System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
             log.info(payment.getPaymentStatus().getDescr());
         } else {
@@ -92,11 +90,13 @@ public class App {
             //return false;
         }
         if (updateBalanceUserApp(payment.getAmount(), this.getUser())) {
-            System.out.println(PaymentStatus.PS6.getDescr());// + ":\n" + user);
-            log.info(PaymentStatus.PS6.getDescr());
+            payment.setPaymentStatus(PaymentStatus.PS6);
+            System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + user);
+            log.info(payment.getPaymentStatus().getDescr());
         } else {
-            System.out.println(PaymentStatus.PS16.getDescr());// + ":\n" + user);
-            log.info(PaymentStatus.PS16.getDescr());
+            payment.setPaymentStatus(PaymentStatus.PS16);
+            System.out.println(payment.getPaymentStatus().getDescr());// + ":\n" + user);
+            log.info(payment.getPaymentStatus().getDescr());
         }
         System.out.printf("=== Успешно проведен платеж №%s от %s (т.%s) пользователю т.%s на сумму %.2fруб. ===\n",
                    payment.getId(), this.getUser().getUserName(), payment.getPayerPhone(), payment.getPayeePhone(), payment.getAmount());
@@ -117,6 +117,7 @@ public class App {
     }
     boolean updatePaymentsDB(Payment payment) {
         // Запись платежа в БД платежей
+        paymentsDB.addPaymentToDB(payment);
         return true;
 //        return false;
     }

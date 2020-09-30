@@ -3,11 +3,10 @@ package ru.sbrf.payment.db;
 import java.util.Date;
 import java.util.HashMap;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 @ToString
-//@Getter
-//@NoArgsConstructor
-//@AllArgsConstructor
+@Slf4j
 
 public class PaymentsDB {
     HashMap<String, Payment> paymentsDB = new HashMap<>();
@@ -24,9 +23,9 @@ public class PaymentsDB {
 
     public boolean addPaymentToDB(Payment payment) {
         paymentsDB.put(payment.getId(), payment);
-//        System.out.println("БД платежей - PaymentsDB:");
+//        log.info("БД платежей - PaymentsDB:");
 //        for (HashMap.Entry<String, Payment> elem : paymentsDB.entrySet())
-//            { System.out.println(elem.getKey() + ": " + elem.getValue()); }
+//            { log.info(elem.getKey() + ": " + elem.getValue()); }
         return true;
     }
 
