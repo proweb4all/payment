@@ -9,11 +9,11 @@ import ru.sbrf.payment.app.App;
 import ru.sbrf.payment.app.StatusAuth;
 import ru.sbrf.payment.common.SomeException;
 import ru.sbrf.payment.common.Validation;
-import ru.sbrf.payment.common.ValidationStrFunc;
+import ru.sbrf.payment.common.ValidationValueFunc;
 
 @Slf4j
 public class Main {
-    static <T> String validationStr(ValidationStrFunc<T> f, T s) throws SomeException {
+    static <T> T validationValue(ValidationValueFunc<T> f, T s) throws SomeException {
         return f.func(s);
     }
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -53,7 +53,7 @@ public class Main {
                     String phone, pass;
                     try {
 //                        phone = Validation.checkPhone(in.nextLine());
-                        phone = validationStr(Validation::checkPhone, in.nextLine());
+                        phone = validationValue(Validation::checkPhone, in.nextLine());
                     } catch (SomeException e) {
                         System.out.println(e);
                         log.info(String.valueOf(e));
@@ -66,7 +66,7 @@ public class Main {
 //                    String pass = new String(passwordChars);
                     try {
 //                        pass = Validation.checkPass(in.nextLine());
-                        pass = validationStr(Validation::checkPass, in.nextLine());
+                        pass = validationValue(Validation::checkPass, in.nextLine());
                     } catch (SomeException e) {
                         System.out.println(e);
                         log.info(String.valueOf(e));
@@ -80,7 +80,7 @@ public class Main {
                         String payeePhone;
                         try {
 //                            payeePhone = Validation.checkPhone(in.nextLine());
-                            payeePhone = validationStr(Validation::checkPhone, in.nextLine());
+                            payeePhone = validationValue(Validation::checkPhone, in.nextLine());
                         } catch (SomeException e) {
                             System.out.println(e);
                             log.info(String.valueOf(e));
