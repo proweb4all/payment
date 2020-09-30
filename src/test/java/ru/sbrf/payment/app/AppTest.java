@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AppTest {
 
     App app = new App();
-    public Payment payment;
+    Payment payment;
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
@@ -37,7 +37,6 @@ class AppTest {
 
     @org.junit.jupiter.api.Test
     void payApp() {
-//        app.authUser("9103333333", "333333", app.getUsersDB());
         assertTrue(app.payApp("9101234567", 100.0, app.getUsersDB()));
     }
 
