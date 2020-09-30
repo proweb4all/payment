@@ -4,6 +4,7 @@ import java.util.HashMap;
 import ru.sbrf.payment.app.StatusAuth;
 import ru.sbrf.payment.app.UserApp;
 import lombok.*;
+import ru.sbrf.payment.common.User;
 
 //@ToString
 //@Getter
@@ -20,24 +21,32 @@ public class UsersDB {
     }
 
     public UserApp authUser(String phone, String password) {
+//        UserRecord user = usersDB.getOrDefault(phone, new UserRecord());
         UserRecord user = usersDB.get(phone);
-        UserApp userFromDB;
+        UserApp userApp;
+//        if (!user.getPhone().equals("")) {
         if (user != null) {
             if (user.getPassword().equals(password)) {
-                userFromDB = new UserApp(StatusAuth.A1, phone, user.getUserName(), user.getAccount(), user.getBalance());
+                userApp = new UserApp(StatusAuth.A1, phone, user.getUserName(), user.getAccount(), user.getBalance());
             } else {
-                userFromDB = new UserApp(StatusAuth.A3);
+                userApp = new UserApp(StatusAuth.A3);
             }
         } else {
-            userFromDB = new UserApp(StatusAuth.A2);
+            userApp = new UserApp(StatusAuth.A2);
         }
-        return userFromDB;
+        return userApp;
     }
 
     public boolean paymentToUsersDB(Payment payment) {
         // Корректировка остатка в БД клиентов
+//        UserRecord user = usersDB.getOrDefault(payment.getPayerPhone(), new UserRecord());
         UserRecord user = usersDB.get(payment.getPayerPhone());
-        user.setBalance(user.getBalance() - payment.getAmount());
-        return true;
+//        if (!user.getPhone().equals("")) {
+        if (user != null) {
+            user.setBalance(user.getBalance() - payment.getAmount());
+            return true;
+        } else {
+            return false;
+        }
     }
 }
