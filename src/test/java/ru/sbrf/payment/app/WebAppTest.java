@@ -8,9 +8,9 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AppTest {
+class WebAppTest {
 
-    App app = new App();
+    WebApp app = new WebApp();
     Payment payment;
 
     @org.junit.jupiter.api.BeforeEach

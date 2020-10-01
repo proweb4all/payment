@@ -3,13 +3,6 @@ package ru.sbrf.payment.db;
 import java.util.HashMap;
 import ru.sbrf.payment.app.StatusAuth;
 import ru.sbrf.payment.app.UserApp;
-import lombok.*;
-import ru.sbrf.payment.common.User;
-
-//@ToString
-//@Getter
-//@NoArgsConstructor
-//@AllArgsConstructor
 
 public class UsersDB {
     private HashMap<String, UserRecord> usersDB = new HashMap<>();
