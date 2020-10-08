@@ -1,7 +1,8 @@
 package ru.sbrf.payment.db;
 
 import java.util.HashMap;
-import ru.sbrf.payment.app.StatusAuth;
+
+import ru.sbrf.payment.app.AuthStatus;
 import ru.sbrf.payment.app.UserApp;
 
 public class UsersDB {
@@ -20,12 +21,12 @@ public class UsersDB {
 //        if (!user.getPhone().equals("")) {
         if (user != null) {
             if (user.getPassword().equals(password)) {
-                userApp = new UserApp(StatusAuth.A1, phone, user.getUserName(), user.getAccount(), user.getBalance());
+                userApp = new UserApp(AuthStatus.A1, phone, user.getUserName(), user.getAccount(), user.getBalance());
             } else {
-                userApp = new UserApp(StatusAuth.A3);
+                userApp = new UserApp(AuthStatus.A3);
             }
         } else {
-            userApp = new UserApp(StatusAuth.A2);
+            userApp = new UserApp(AuthStatus.A2);
         }
         return userApp;
     }

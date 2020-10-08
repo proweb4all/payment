@@ -1,13 +1,9 @@
 package ru.sbrf.payment.app;
 
 import java.util.Date;
-import java.util.Scanner;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.sbrf.payment.common.Settings;
-import ru.sbrf.payment.common.SomeException;
-import ru.sbrf.payment.common.Validation;
-import ru.sbrf.payment.common.ValidationValueFunc;
+import ru.sbrf.payment.common.*;
 import ru.sbrf.payment.db.Payment;
 import ru.sbrf.payment.db.PaymentStatus;
 import ru.sbrf.payment.db.PaymentsDB;
@@ -23,7 +19,7 @@ import lombok.*;
 public class WebApp implements App {
     private Settings settings = new Settings();
     private UserApp user = new UserApp();
-    protected UsersDB usersDB = new UsersDB();
+    private UsersDB usersDB = new UsersDB();
     private PaymentsDB paymentsDB = new PaymentsDB();
 
     static <T> T validationValue(ValidationValueFunc<T> f, T s) throws SomeException {
@@ -42,12 +38,11 @@ public class WebApp implements App {
         int code = 11;
         boolean auth = false;
         String inStr;
-        Scanner in = new Scanner(System.in);
         do {
             System.out.println("=====================================================");
             System.out.println("☎☎☎ ПРИЛОЖЕНИЕ ДЛЯ ОПЛАТЫ МОБИЛЬНОГО ТЕЛЕФОНА ☎☎☎");
             System.out.println("=====================================================");
-            auth = (this.getUser().getAuthEnum() == StatusAuth.A1);
+            auth = (this.getUser().getAuthStatus() == AuthStatus.A1);
             if (auth) {
                 System.out.println("+++ Вы авторизованы как " + getUser().getUserName() + ", т." + getUser().getPhone() + ", остаток средств " + getUser().getBalance() + "руб.");
                 System.out.println("==============================================\nВведите номер дальнейшего действия: ");
@@ -60,7 +55,7 @@ public class WebApp implements App {
             }
             System.out.print("0 - выход\n> ");
             do {
-                inStr = in.nextLine();
+                inStr = SomeMethods.getUserStr();
                 if (inStr.length() > 0) { break; }
             } while (true);
             code = Character.getNumericValue(inStr.charAt(0));
@@ -70,7 +65,7 @@ public class WebApp implements App {
                     System.out.print("Введите свой номер телефона (10 цифр): ");
                     String phone, pass;
                     try {
-                        phone = validationValue(Validation::checkPhone, in.nextLine());
+                        phone = validationValue(Validation::checkPhone, SomeMethods.getUserStr());
                     } catch (SomeException e) {
                         System.out.println(e);
                         log.info(String.valueOf(e));
@@ -82,7 +77,7 @@ public class WebApp implements App {
 //                    char passwordChars[] = console.readPassword();
 //                    String pass = new String(passwordChars);
                     try {
-                        pass = validationValue(Validation::checkPass, in.nextLine());
+                        pass = validationValue(Validation::checkPass, SomeMethods.getUserStr());
                     } catch (SomeException e) {
                         System.out.println(e);
                         log.info(String.valueOf(e));
@@ -95,7 +90,7 @@ public class WebApp implements App {
                         System.out.print("Введите номер телефона получателя платежа (10 цифр): ");
                         String payeePhone;
                         try {
-                            payeePhone = validationValue(Validation::checkPhone, in.nextLine());
+                            payeePhone = validationValue(Validation::checkPhone, SomeMethods.getUserStr());
                         } catch (SomeException e) {
                             System.out.println(e);
                             log.info(String.valueOf(e));
@@ -105,7 +100,7 @@ public class WebApp implements App {
                         double amount = 0.0;
                         do {
                             try {
-                                amount = Validation.checkAmount(in.nextLine(), getUser().getBalance());
+                                amount = Validation.checkAmount(SomeMethods.getUserStr(), getUser().getBalance());
                                 break;
                             } catch (SomeException e) {
                                 System.out.println(e);
@@ -136,7 +131,6 @@ public class WebApp implements App {
             }
             System.out.println();
         } while (code != 0);
-        in.close();
         log.info("☎☎☎ Приложение Payment закрыто");
         log.info("=====================================================");
     }
@@ -145,13 +139,13 @@ public class WebApp implements App {
         // Сделать отсылку на сервер phone и password, возвратить результат проверки boolean
         log.info("Попытка авторизации пользователя с т." + phone + "...");
         this.user = usersDB.authUser(phone, password);
-        boolean result = (this.user.getAuthEnum() == StatusAuth.A1);
+        boolean result = (this.user.getAuthStatus() == AuthStatus.A1);
         if (result) {
-            System.out.println(this.user.getAuthEnum().getDescr() + " " + this.user.getUserName() + " (т." + this.user.getPhone() + ") " + this.user.getBalance());
-            log.info(this.user.getAuthEnum().getDescr() + " " + this.user.getUserName() + " (т." + this.user.getPhone() + ") " + this.user.getBalance());
+            System.out.println(this.user.getAuthStatus().getDescr() + " " + this.user.getUserName() + " (т." + this.user.getPhone() + ") " + this.user.getBalance());
+            log.info(this.user.getAuthStatus().getDescr() + " " + this.user.getUserName() + " (т." + this.user.getPhone() + ") " + this.user.getBalance());
         } else {
-            System.out.println(this.user.getAuthEnum().getDescr());
-            log.info(this.user.getAuthEnum().getDescr());
+            System.out.println(this.user.getAuthStatus().getDescr());
+            log.info(this.user.getAuthStatus().getDescr());
         }
         return result;
     }

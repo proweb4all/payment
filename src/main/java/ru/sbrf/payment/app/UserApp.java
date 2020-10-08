@@ -1,6 +1,5 @@
 package ru.sbrf.payment.app;
 
-import lombok.extern.slf4j.Slf4j;
 import ru.sbrf.payment.common.User;
 
 import lombok.*;
@@ -9,20 +8,16 @@ import lombok.*;
 @AllArgsConstructor
 
 public class UserApp extends User {
-    private StatusAuth authEnum = StatusAuth.A0;
+    private AuthStatus authStatus = AuthStatus.A0;
 
-    public UserApp(StatusAuth authEnum, String phone, String userName, String account, double balance) {
+    public UserApp(AuthStatus authStatus, String phone, String userName, String account, double balance) {
         super(phone, userName, account, balance);
-        this.authEnum = authEnum;
+        this.authStatus = authStatus;
     }
-
-//    void setAuthEnum(StatusAuth authEnum) {
-//        this.authEnum = authEnum;
-//    }
 
     @Override
     public String toString() {
-        return "UserApp(statusAuth=" + this.getAuthEnum() + ", " + super.toString() + ")";
+        return "UserApp(statusAuth=" + this.getAuthStatus() + ", " + super.toString() + ")";
     }
 }
 
