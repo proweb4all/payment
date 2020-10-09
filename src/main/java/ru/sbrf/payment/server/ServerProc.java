@@ -31,29 +31,29 @@ public class ServerProc implements Server{
     public Payment payServer(Payment payment) {
         // Проведение платежа на сервере
         if (checkPayment(payment.getId())) {
-            setStatusPaymentAndLogging(payment, PaymentStatus.PS2);
+            setPaymentStatusAndLogging(payment, PaymentStatus.PS2);
         } else {
-            setStatusPaymentAndLogging(payment, PaymentStatus.PS12);
+            setPaymentStatusAndLogging(payment, PaymentStatus.PS12);
         }
         if (paymentToAPI(payment)) {
-            setStatusPaymentAndLogging(payment, PaymentStatus.PS3);
+            setPaymentStatusAndLogging(payment, PaymentStatus.PS3);
         } else {
-            setStatusPaymentAndLogging(payment, PaymentStatus.PS13);
+            setPaymentStatusAndLogging(payment, PaymentStatus.PS13);
         }
         if (usersDB.paymentToUsersDB(payment)) {
-            setStatusPaymentAndLogging(payment, PaymentStatus.PS4);
+            setPaymentStatusAndLogging(payment, PaymentStatus.PS4);
         } else {
-            setStatusPaymentAndLogging(payment, PaymentStatus.PS14);
+            setPaymentStatusAndLogging(payment, PaymentStatus.PS14);
         }
         if (updatePaymentsDB(payment)) {
-            setStatusPaymentAndLogging(payment, PaymentStatus.PS5);
+            setPaymentStatusAndLogging(payment, PaymentStatus.PS5);
         } else {
-            setStatusPaymentAndLogging(payment, PaymentStatus.PS15);
+            setPaymentStatusAndLogging(payment, PaymentStatus.PS15);
         }
         return payment;
     }
 
-    public static void setStatusPaymentAndLogging(Payment payment, PaymentStatus paymentStatus) {
+    public static void setPaymentStatusAndLogging(Payment payment, PaymentStatus paymentStatus) {
         payment.setPaymentStatus(paymentStatus);
         System.out.println(payment.getPaymentStatus().getDescr());
         log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);

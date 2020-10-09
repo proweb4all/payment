@@ -161,9 +161,9 @@ public class WebApp implements App {
             return false;
         }
         if (updateBalanceUserApp(payment.getAmount(), this.getUser())) {
-            ServerProc.setStatusPaymentAndLogging(payment, PaymentStatus.PS6);
+            ServerProc.setPaymentStatusAndLogging(payment, PaymentStatus.PS6);
         } else {
-            ServerProc.setStatusPaymentAndLogging(payment, PaymentStatus.PS16);
+            ServerProc.setPaymentStatusAndLogging(payment, PaymentStatus.PS16);
         }
         System.out.printf("=== Успешно проведен платеж №%s от %s (т.%s) пользователю (т.%s) на сумму %.2fруб. ===\n",
                    payment.getId(), this.getUser().getUserName(), payment.getPayerPhone(), payment.getPayeePhone(), payment.getAmount());
