@@ -17,6 +17,8 @@ public class UsersDB {
     public UserApp authUser(String phone, String password) {
 //        UserRecord user = usersDB.getOrDefault(phone, new UserRecord());
         UserRecord user = usersDB.get(phone);
+//        System.out.println("usersDB: \n" + usersDB);
+//        System.out.println(phone + " " + password + " Результат поиска в UsersDB: \n" + user);
         UserApp userApp;
 //        if (!user.getPhone().equals("")) {
         if (user != null) {
