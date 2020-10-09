@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import ru.sbrf.payment.common.*;
 import ru.sbrf.payment.db.Payment;
 import ru.sbrf.payment.db.PaymentStatus;
-import ru.sbrf.payment.db.PaymentsDB;
 import ru.sbrf.payment.server.ServerProc;
 
 import lombok.*;
@@ -27,7 +26,7 @@ public class WebApp implements App {
         log.info("=====================================================");
         log.info("☎☎☎ Приложение Payment запущено ");
         int code = 11;
-        boolean auth = false;
+        boolean auth;
         String inStr;
         do {
             System.out.println("=====================================================");
@@ -149,7 +148,7 @@ public class WebApp implements App {
             return false;
         }
         Date dateNow = new Date();
-        Payment payment = new Payment(PaymentsDB.createPaymentID(this.user.getPhone(), dateNow),
+        Payment payment = new Payment(Payment.createPaymentID(this.user.getPhone(), dateNow),
                 this.user.getPhone(), this.user.getAccount(), dateNow, PaymentStatus.PS1, payeePhone, amount);
         System.out.println(payment.getPaymentStatus().getDescr() + " №" + payment.getId() + " от " + this.getUser().getUserName() + " (т." + payment.getPayerPhone()
                 + ") пользователю (т." + payment.getPayeePhone() + ") на сумму " + payment.getAmount() + "руб.");
@@ -158,7 +157,7 @@ public class WebApp implements App {
         // Проведение платежа на сервере
         payment = ServerProc.serverLink.get().payServer(payment);
         // Возврат управления с сервера
-        if (payment.getPaymentStatus() == PaymentStatus.PS12 | payment.getPaymentStatus() == PaymentStatus.PS13) {
+        if (payment.getPaymentStatus() == PaymentStatus.PS12 || payment.getPaymentStatus() == PaymentStatus.PS13) {
             return false;
         }
         if (updateBalanceUserApp(payment.getAmount(), this.getUser())) {

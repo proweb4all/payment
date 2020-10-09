@@ -17,6 +17,10 @@ public class Payment {
     private String payeePhone = "";
     private double amount = -1.0;
 
+    public static String createPaymentID(String phone, Date date) {
+        return phone + "_" + date.getTime();
+    }
+
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }

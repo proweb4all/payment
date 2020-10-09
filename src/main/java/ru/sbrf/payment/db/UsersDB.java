@@ -15,12 +15,8 @@ public class UsersDB {
     }
 
     public UserApp authUser(String phone, String password) {
-//        UserRecord user = usersDB.getOrDefault(phone, new UserRecord());
         UserRecord user = usersDB.get(phone);
-//        System.out.println("usersDB: \n" + usersDB);
-//        System.out.println(phone + " " + password + " Результат поиска в UsersDB: \n" + user);
         UserApp userApp;
-//        if (!user.getPhone().equals("")) {
         if (user != null) {
             if (user.getPassword().equals(password)) {
                 userApp = new UserApp(AuthStatus.A1, phone, user.getUserName(), user.getAccount(), user.getBalance());
@@ -35,9 +31,7 @@ public class UsersDB {
 
     public boolean paymentToUsersDB(Payment payment) {
         // Корректировка остатка в БД клиентов
-//        UserRecord user = usersDB.getOrDefault(payment.getPayerPhone(), new UserRecord());
         UserRecord user = usersDB.get(payment.getPayerPhone());
-//        if (!user.getPhone().equals("")) {
         if (user != null) {
             user.setBalance(user.getBalance() - payment.getAmount());
             return true;

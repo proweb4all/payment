@@ -17,10 +17,6 @@ public class PaymentsDB {
         paymentsDB.put("9103333333_test-init", new Payment("9103333333_test-init", "9103333333", "XXXXX810X53003333333", new Date(), PaymentStatus.PS5, "1122334455", 111.0));
     }
 
-    public static String createPaymentID(String phone, Date date) {
-        return phone + "_" + date.getTime();
-    }
-
     public boolean addPaymentToDB(Payment payment) {
         paymentsDB.put(payment.getId(), payment);
 //        log.info("БД платежей - PaymentsDB:");

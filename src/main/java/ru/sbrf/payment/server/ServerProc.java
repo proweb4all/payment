@@ -83,5 +83,4 @@ public class ServerProc implements Server{
         return paymentsDB.addPaymentToDB(payment);
     }
 
-
 }
