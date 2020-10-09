@@ -11,7 +11,7 @@ import ru.sbrf.payment.server.ServerProc;
 import lombok.*;
 @ToString
 @Getter
-@NoArgsConstructor
+//@NoArgsConstructor
 @Slf4j
 
 public class WebApp implements App {
@@ -72,7 +72,7 @@ public class WebApp implements App {
                     if (serverAvailable()) {
                         authUserApp(ServerProc.serverLink.get().authUserServer(phone, pass));
                     } else {
-                        System.out.print("Проблема авторизации: нет ссылки на сервер.");
+                        System.out.println("Проблема авторизации: нет ссылки на сервер.");
                         log.info("Проблема авторизации: нет ссылки на сервер.");
                     }
                     break;
@@ -143,7 +143,7 @@ public class WebApp implements App {
     public boolean payApp(String payeePhone, double amount) {
         // Создание платежа
         if (!serverAvailable()) {
-            System.out.print("Проблема проведения платежа: нет ссылки на сервер.");
+            System.out.println("Проблема проведения платежа: нет ссылки на сервер.");
             log.info("Проблема проведения платежа: нет ссылки на сервер.");
             return false;
         }
@@ -161,13 +161,9 @@ public class WebApp implements App {
             return false;
         }
         if (updateBalanceUserApp(payment.getAmount(), this.getUser())) {
-            payment.setPaymentStatus(PaymentStatus.PS6);
-            System.out.println(payment.getPaymentStatus().getDescr());
-            log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            ServerProc.setStatusPaymentAndLogging(payment, PaymentStatus.PS6);
         } else {
-            payment.setPaymentStatus(PaymentStatus.PS16);
-            System.out.println(payment.getPaymentStatus().getDescr());
-            log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            ServerProc.setStatusPaymentAndLogging(payment, PaymentStatus.PS16);
         }
         System.out.printf("=== Успешно проведен платеж №%s от %s (т.%s) пользователю (т.%s) на сумму %.2fруб. ===\n",
                    payment.getId(), this.getUser().getUserName(), payment.getPayerPhone(), payment.getPayeePhone(), payment.getAmount());

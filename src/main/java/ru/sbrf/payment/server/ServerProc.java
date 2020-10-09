@@ -31,44 +31,33 @@ public class ServerProc implements Server{
     public Payment payServer(Payment payment) {
         // Проведение платежа на сервере
         if (checkPayment(payment.getId())) {
-            payment.setPaymentStatus(PaymentStatus.PS2);
-            System.out.println(payment.getPaymentStatus().getDescr());
-            log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            setStatusPaymentAndLogging(payment, PaymentStatus.PS2);
         } else {
-            payment.setPaymentStatus(PaymentStatus.PS12);
-            System.out.println(payment.getPaymentStatus().getDescr());
-            log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            setStatusPaymentAndLogging(payment, PaymentStatus.PS12);
         }
         if (paymentToAPI(payment)) {
-            payment.setPaymentStatus(PaymentStatus.PS3);
-            System.out.println(payment.getPaymentStatus().getDescr());
-            log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            setStatusPaymentAndLogging(payment, PaymentStatus.PS3);
         } else {
-            payment.setPaymentStatus(PaymentStatus.PS13);
-            System.out.println(payment.getPaymentStatus().getDescr());
-            log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            setStatusPaymentAndLogging(payment, PaymentStatus.PS13);
         }
         if (usersDB.paymentToUsersDB(payment)) {
-            payment.setPaymentStatus(PaymentStatus.PS4);
-            System.out.println(payment.getPaymentStatus().getDescr());
-            log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            setStatusPaymentAndLogging(payment, PaymentStatus.PS4);
         } else {
-            payment.setPaymentStatus(PaymentStatus.PS14);
-            System.out.println(payment.getPaymentStatus().getDescr());
-            log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            setStatusPaymentAndLogging(payment, PaymentStatus.PS14);
         }
         if (updatePaymentsDB(payment)) {
-            payment.setPaymentStatus(PaymentStatus.PS5);
-            System.out.println(payment.getPaymentStatus().getDescr());
-            log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            setStatusPaymentAndLogging(payment, PaymentStatus.PS5);
         } else {
-            payment.setPaymentStatus(PaymentStatus.PS15);
-            System.out.println(payment.getPaymentStatus().getDescr());
-            log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+            setStatusPaymentAndLogging(payment, PaymentStatus.PS15);
         }
         return payment;
     }
 
+    public static void setStatusPaymentAndLogging(Payment payment, PaymentStatus paymentStatus) {
+        payment.setPaymentStatus(paymentStatus);
+        System.out.println(payment.getPaymentStatus().getDescr());
+        log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
+    }
     boolean checkPayment(String paymentID) {
         // Проверка реквизитов платежа по БД платежей
         return paymentsDB.checkPaymentID(paymentID);

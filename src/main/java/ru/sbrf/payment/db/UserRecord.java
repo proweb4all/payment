@@ -5,7 +5,6 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 
 public class UserRecord extends User {
     private String password = "";
