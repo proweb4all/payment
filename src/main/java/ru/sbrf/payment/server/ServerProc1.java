@@ -1,22 +1,23 @@
 package ru.sbrf.payment.server;
 
-import lombok.extern.slf4j.Slf4j;
 import ru.sbrf.payment.app.UserApp;
 import ru.sbrf.payment.db.Payment;
 import ru.sbrf.payment.db.PaymentStatus;
 import ru.sbrf.payment.db.PaymentsDB;
 import ru.sbrf.payment.db.UsersDB;
 import java.util.Optional;
+
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 @ToString
 @Getter
 @Slf4j
 
-public class ServerProc extends BaseServer{
+public class ServerProc1 extends BaseServer{
     private final UsersDB usersDB = new UsersDB();
     private final PaymentsDB paymentsDB = new PaymentsDB();
 
-    public ServerProc() {
+    public ServerProc1() {
         serverLink = Optional.of(this);
         usersDB.init();
         paymentsDB.init();
@@ -57,7 +58,7 @@ public class ServerProc extends BaseServer{
     @Override
     public void setPaymentStatusAndLogging(Payment payment, PaymentStatus paymentStatus) {
         payment.setPaymentStatus(paymentStatus);
-        System.out.println("ServerProc: - " + payment.getPaymentStatus().getDescr());
+        System.out.println("ServerProc1: - " + payment.getPaymentStatus().getDescr());
         log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
     }
     boolean checkPayment(String paymentID) {

@@ -2,9 +2,7 @@ package ru.sbrf.payment.db;
 
 import ru.sbrf.payment.common.User;
 import lombok.*;
-
 @Getter
-@NoArgsConstructor
 
 public class UserRecord extends User {
     private String password = "";

@@ -6,22 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 import ru.sbrf.payment.common.*;
 import ru.sbrf.payment.db.Payment;
 import ru.sbrf.payment.db.PaymentStatus;
-import ru.sbrf.payment.server.ServerProc;
+import ru.sbrf.payment.server.BaseServer;
 
 import lombok.*;
 @ToString
 @Getter
-//@NoArgsConstructor
 @Slf4j
 
-public class WebApp implements App {
+public class WebApp implements IApp {
     private Settings settings = new Settings();
     private UserApp user = new UserApp();
 
-    static <T> T validationValue(ValidationValueFunc<T> f, T s) throws SomeException {
+    static <T> T validationValue(IValidationValueFunc<T> f, T s) throws SomeException {
         return f.func(s);
     }
 
+    @Override
     public void runApp() {
         log.info("=====================================================");
         log.info("☎☎☎ Приложение Payment запущено ");
@@ -70,7 +70,7 @@ public class WebApp implements App {
                         break;
                     }
                     if (serverAvailable()) {
-                        authUserApp(ServerProc.serverLink.get().authUserServer(phone, pass));
+                        authUserApp(BaseServer.serverLink.get().authUserServer(phone, pass));
                     } else {
                         System.out.println("Проблема авторизации: нет ссылки на сервер.");
                         log.info("Проблема авторизации: нет ссылки на сервер.");
@@ -126,6 +126,7 @@ public class WebApp implements App {
         log.info("=====================================================");
     }
 
+    @Override
     public boolean authUserApp(UserApp userApp) {
         // Получить пользователя после попытки авторизации
         this.user = userApp;
@@ -140,6 +141,7 @@ public class WebApp implements App {
         return result;
     }
 
+    @Override
     public boolean payApp(String payeePhone, double amount) {
         // Создание платежа
         if (!serverAvailable()) {
@@ -155,15 +157,15 @@ public class WebApp implements App {
         log.info(payment.getPaymentStatus().getDescr() + " №" + payment.getId() + " от " + this.getUser().getUserName() + " (т." + payment.getPayerPhone()
                 + ") пользователю (т." + payment.getPayeePhone() + ") на сумму " + payment.getAmount() + "руб.");
         // Проведение платежа на сервере
-        payment = ServerProc.serverLink.get().payServer(payment);
+        payment = BaseServer.serverLink.get().payServer(payment);
         // Возврат управления с сервера
         if (payment.getPaymentStatus() == PaymentStatus.PS12 || payment.getPaymentStatus() == PaymentStatus.PS13) {
             return false;
         }
         if (updateBalanceUserApp(payment.getAmount(), this.getUser())) {
-            ServerProc.setPaymentStatusAndLogging(payment, PaymentStatus.PS6);
+            BaseServer.serverLink.get().setPaymentStatusAndLogging(payment, PaymentStatus.PS6);
         } else {
-            ServerProc.setPaymentStatusAndLogging(payment, PaymentStatus.PS16);
+            BaseServer.serverLink.get().setPaymentStatusAndLogging(payment, PaymentStatus.PS16);
         }
         System.out.printf("=== Успешно проведен платеж №%s от %s (т.%s) пользователю (т.%s) на сумму %.2fруб. ===\n",
                    payment.getId(), this.getUser().getUserName(), payment.getPayerPhone(), payment.getPayeePhone(), payment.getAmount());
@@ -179,7 +181,7 @@ public class WebApp implements App {
     }
 
     boolean serverAvailable() {
-        return ServerProc.serverLink.isPresent();
+        return BaseServer.serverLink.isPresent();
     }
 
 }

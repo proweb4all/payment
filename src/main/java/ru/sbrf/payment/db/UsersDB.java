@@ -6,7 +6,7 @@ import ru.sbrf.payment.app.AuthStatus;
 import ru.sbrf.payment.app.UserApp;
 
 public class UsersDB {
-    private HashMap<String, UserRecord> usersDB = new HashMap<>();
+    private final HashMap<String, UserRecord> usersDB = new HashMap<>();
 
     public void init() {
         usersDB.put("9101111111", new UserRecord("111111", "9101111111", "Ваня Ветров", "XXXXX810X53001111111", 300.0));

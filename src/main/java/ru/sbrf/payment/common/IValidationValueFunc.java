@@ -1,5 +1,5 @@
 package ru.sbrf.payment.common;
 
-public interface ValidationValueFunc<T> {
+public interface IValidationValueFunc<T> {
     T func(T str) throws SomeException;
 }

@@ -18,7 +18,7 @@ public enum PaymentStatus {
     PS14("--- Проблема с корректировкой суммы остатка в БД клиентов"),
     PS15("--- Проблема с сохранением платежа в БД платежей"),
     PS16("--- Проблема с корректировкой суммы остатка клиента в приложении");
-    private String descr;
+    private final String descr;
 
     PaymentStatus(String descr) { this.descr = descr; }
 
