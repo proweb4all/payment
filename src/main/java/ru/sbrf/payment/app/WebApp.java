@@ -32,6 +32,7 @@ public class WebApp implements IApp {
             System.out.println("=====================================================");
             System.out.println("☎☎☎ ПРИЛОЖЕНИЕ ДЛЯ ОПЛАТЫ МОБИЛЬНОГО ТЕЛЕФОНА ☎☎☎");
             System.out.println("=====================================================");
+            System.out.println("Работа с сервером " + BaseServer.serverLink.get().getNameServer());
             auth = (this.getUser().getAuthStatus() == AuthStatus.A1);
             if (auth) {
                 System.out.println("+++ Вы авторизованы как " + getUser().getUserName() + ", т." + getUser().getPhone() + ", остаток средств " + getUser().getBalance() + "руб.");

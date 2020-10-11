@@ -1,32 +1,30 @@
 package ru.sbrf.payment.server;
 
-import ru.sbrf.payment.app.UserApp;
-import ru.sbrf.payment.db.Payment;
-import ru.sbrf.payment.db.PaymentStatus;
-import ru.sbrf.payment.db.PaymentsDB;
-import ru.sbrf.payment.db.UsersDB;
-import java.util.Optional;
-
-import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import ru.sbrf.payment.app.UserApp;
+import ru.sbrf.payment.db.*;
+
+import java.util.Optional;
+import lombok.*;
 @ToString
 @Getter
 @Slf4j
 
-public class ServerProc1 extends BaseServer{
-    private final UsersDB usersDB = new UsersDB();
-    private final PaymentsDB paymentsDB = new PaymentsDB();
+public class ServerSber extends BaseServer{
+    private PaymentsDBSber paymentsDBSber = new PaymentsDBSber();
+    private UsersDBSber usersDBSber = new UsersDBSber();
 
-    public ServerProc1() {
+    public ServerSber() {
         serverLink = Optional.of(this);
-        usersDB.init();
-        paymentsDB.init();
+        setNameServer("ServerSber");
+        usersDBSber.init();
+        paymentsDBSber.init();
     }
 
     @Override
     public UserApp authUserServer(String phone, String password) {
         log.info("Попытка авторизации пользователя с т." + phone + "...");
-        return usersDB.authUser(phone, password);
+        return usersDBSber.authUser(phone, password);
     }
 
     @Override
@@ -42,7 +40,7 @@ public class ServerProc1 extends BaseServer{
         } else {
             setPaymentStatusAndLogging(payment, PaymentStatus.PS13);
         }
-        if (usersDB.paymentToUsersDB(payment)) {
+        if (usersDBSber.paymentToUsersDB(payment)) {
             setPaymentStatusAndLogging(payment, PaymentStatus.PS4);
         } else {
             setPaymentStatusAndLogging(payment, PaymentStatus.PS14);
@@ -58,12 +56,12 @@ public class ServerProc1 extends BaseServer{
     @Override
     public void setPaymentStatusAndLogging(Payment payment, PaymentStatus paymentStatus) {
         payment.setPaymentStatus(paymentStatus);
-        System.out.println("ServerProc1: - " + payment.getPaymentStatus().getDescr());
+        System.out.println(getNameServer() + ": - " + payment.getPaymentStatus().getDescr());
         log.info(payment.getPaymentStatus().getDescr());// + ":\n" + payment);
     }
     boolean checkPayment(String paymentID) {
         // Проверка реквизитов платежа по БД платежей
-        return paymentsDB.checkPaymentID(paymentID);
+        return paymentsDBSber.checkPaymentID(paymentID);
     }
     boolean paymentToAPI(Payment payment) {
         // Отправка и возврат из API сотового оператора
@@ -72,7 +70,7 @@ public class ServerProc1 extends BaseServer{
     }
     boolean updatePaymentsDB(Payment payment) {
         // Запись платежа в БД платежей
-        return paymentsDB.addPaymentToDB(payment);
+        return paymentsDBSber.addPaymentToDB(payment);
     }
 
 }

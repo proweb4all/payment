@@ -2,9 +2,9 @@ package ru.sbrf.payment.server;
 
 import java.util.Optional;
 
-public class ServerProcDefault extends BaseServer{
+public class ServerDefault extends BaseServer{
 
-    public ServerProcDefault() {
+    public ServerDefault() {
         serverLink = Optional.of(this);
     }
 

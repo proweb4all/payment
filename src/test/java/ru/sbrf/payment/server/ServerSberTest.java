@@ -11,14 +11,14 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ServerProcTest {
+class ServerSberTest {
     WebApp app = new WebApp();
-    ServerProc serverProc = new ServerProc();
+    ServerSber serverSber = new ServerSber();
     Payment payment;
 
     @BeforeEach
     void setUp() {
-        app.authUserApp(ServerProc.serverLink.get().authUserServer("9102222222", "222222"));
+        app.authUserApp(ServerSber.serverLink.get().authUserServer("9102222222", "222222"));
 
         Date dateNow = new Date();
         payment = new Payment(Payment.createPaymentID(app.getUser().getPhone(), dateNow),
@@ -28,26 +28,26 @@ class ServerProcTest {
 
     @Test
     void authUserServer() {
-        assertTrue(serverProc.authUserServer("9102222222", "222222").getAuthStatus() == AuthStatus.A1);
+        assertTrue(serverSber.authUserServer("9102222222", "222222").getAuthStatus() == AuthStatus.A1);
     }
 
     @Test
     void payServer() {
-        assertTrue(serverProc.payServer(payment).getPaymentStatus() == PaymentStatus.PS5);
+        assertTrue(serverSber.payServer(payment).getPaymentStatus() == PaymentStatus.PS5);
     }
 
     @Test
     void checkPayment() {
-        assertTrue(serverProc.checkPayment(payment.getId()));
+        assertTrue(serverSber.checkPayment(payment.getId()));
     }
 
     @Test
     void paymentToAPI() {
-        assertTrue(serverProc.paymentToAPI(payment));
+        assertTrue(serverSber.paymentToAPI(payment));
     }
 
     @Test
     void updatePaymentsDB() {
-        assertTrue(serverProc.updatePaymentsDB(payment));
+        assertTrue(serverSber.updatePaymentsDB(payment));
     }
 }
