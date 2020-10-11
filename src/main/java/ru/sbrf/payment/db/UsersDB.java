@@ -7,11 +7,8 @@ import lombok.*;
 @ToString
 @Getter
 
-public class UsersDB implements IUsersDB{
+public abstract class UsersDB implements IUsersDB{
     private final HashMap<String, UserRecord> usersDB = new HashMap<>();
-
-    @Override
-    public void init() {}
 
     @Override
     public UserApp authUser(String phone, String password) {

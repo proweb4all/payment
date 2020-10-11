@@ -1,18 +1,15 @@
 package ru.sbrf.payment.db;
 
-import java.util.Date;
 import java.util.HashMap;
+//import lombok.extern.slf4j.Slf4j;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-
 @ToString
-@Slf4j
+@Getter
+//@Slf4j
 
-public class PaymentsDB implements IPaymentsDB{
-    HashMap<String, Payment> paymentsDB = new HashMap<>();
 
-    @Override
-    public void init() {}
+public abstract class PaymentsDB implements IPaymentsDB{
+    private final HashMap<String, Payment> paymentsDB = new HashMap<>();
 
     @Override
     public boolean addPaymentToDB(Payment payment) {

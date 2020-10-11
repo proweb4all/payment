@@ -1,6 +1,6 @@
 package ru.sbrf.payment.db;
 
-public class UsersDBSber extends UsersDB{
+public class UsersDBBank1 extends UsersDB{
     @Override
     public void init() {
         getUsersDB().put("9101111111", new UserRecord("111111", "9101111111", "Ваня Ветров", "XXXXX810X53001111111", 1300.0));

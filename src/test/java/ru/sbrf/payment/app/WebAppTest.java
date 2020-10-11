@@ -3,7 +3,7 @@ package ru.sbrf.payment.app;
 import ru.sbrf.payment.db.Payment;
 import ru.sbrf.payment.db.PaymentStatus;
 //import ru.sbrf.payment.db.PaymentsDB;
-import ru.sbrf.payment.server.ServerSber;
+import ru.sbrf.payment.server.ServerBank1;
 
 import java.util.Date;
 
@@ -12,12 +12,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class WebAppTest {
 
     WebApp app = new WebApp();
-    ServerSber serverSber = new ServerSber();
+    ServerBank1 serverBank1 = new ServerBank1();
     Payment payment;
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
-        app.authUserApp(ServerSber.serverLink.get().authUserServer("9102222222", "222222"));
+        app.authUserApp(ServerBank1.serverLink.get().authUserServer("9102222222", "222222"));
 
         Date dateNow = new Date();
         payment = new Payment(Payment.createPaymentID(app.getUser().getPhone(), dateNow),
@@ -30,7 +30,7 @@ class WebAppTest {
 
     @org.junit.jupiter.api.Test
     void authUser() {
-        assertTrue(app.authUserApp(ServerSber.serverLink.get().authUserServer("9102222222", "222222")));
+        assertTrue(app.authUserApp(ServerBank1.serverLink.get().authUserServer("9102222222", "222222")));
     }
 
     @org.junit.jupiter.api.Test
