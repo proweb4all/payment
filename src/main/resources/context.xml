@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="webapp" class="ru.sbrf.payment.app.WebApp"></bean>
+    <bean id="server1" class="ru.sbrf.payment.server.ServerBank1"></bean>
+    <bean id="server2" class="ru.sbrf.payment.server.ServerBank2"></bean>
+    <bean id="serverDefault" class="ru.sbrf.payment.server.ServerDefault"></bean>
+
+</beans>

@@ -19,6 +19,7 @@ public abstract class BaseServer implements IServer {
     @Override
     public UserApp authUserServer(String phone, String password) {
         log.info("Попытка авторизации пользователя с т." + phone + "...");
+//        System.out.println("+++ Текущий сервер: " + BaseServer.serverLink.get().getNameServer());
         return usersDBBank.authUser(phone, password);
     }
 

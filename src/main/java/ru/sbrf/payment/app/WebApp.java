@@ -7,12 +7,10 @@ import ru.sbrf.payment.common.*;
 import ru.sbrf.payment.db.Payment;
 import ru.sbrf.payment.db.PaymentStatus;
 import ru.sbrf.payment.server.BaseServer;
-
 import lombok.*;
 @ToString
 @Getter
 @Slf4j
-
 public class WebApp implements IApp {
     private Settings settings = new Settings();
     private UserApp user = new UserApp();
