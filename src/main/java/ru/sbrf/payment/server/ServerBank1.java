@@ -17,6 +17,7 @@ public class ServerBank1 extends BaseServer{
         getUsersDBBank().init();
         setPaymentsDBBank(new PaymentsDBBank1());
         getPaymentsDBBank().init();
+        System.out.println("1. ServerBank1 -> BaseServer: " + BaseServer.serverLink.get().getUsersDBBank());
     }
 
 }

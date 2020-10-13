@@ -3,6 +3,7 @@ package ru.sbrf.payment;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.sbrf.payment.app.WebApp;
+import ru.sbrf.payment.server.BaseServer;
 import ru.sbrf.payment.server.ServerBank1;
 //import ru.sbrf.payment.server.ServerBank2;
 //import ru.sbrf.payment.server.ServerDefault;
@@ -22,7 +23,7 @@ public class Main {
 //        ServerBank1 serverBank1 = context.getBean("server1", ServerBank1.class);
 // // //        ServerBank2 serverBank2 = context.getBean("server2", ServerBank2.class);
 // // //        ServerDefault serverDefault = context.getBean("serverDefault", ServerDefault.class);
-
+        System.out.println("2. ServerBank1 -> BaseServer: " + BaseServer.serverLink.get().getUsersDBBank());
         app.runApp();
 
     }
