@@ -12,18 +12,18 @@ public class Main {
     public static void main(String[] args) {
 
 //        // Обычная реализация
-        WebApp app = new WebApp();
-        ServerBank1 serverBank1 = new ServerBank1(); // Можно закомментировать, app будет запускаться, но без серверного функционала
+//        WebApp app = new WebApp();
+//        ServerBank1 serverBank1 = new ServerBank1(); // Можно закомментировать, app будет запускаться, но без серверного функционала
 // // //        ServerBank2 serverBank2 = new ServerBank2(); // Пример другого сервера, можно подключить его
 // // //        ServerDefault serverDefault = new ServerDefault(); // Пример сервера с дефолтным (никаким) функционалом
 
 //        // Spring реализация
-//        ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
-//        WebApp app = context.getBean("webapp", WebApp.class);
-//        ServerBank1 serverBank1 = context.getBean("server1", ServerBank1.class);
+        ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+        WebApp app = context.getBean("webapp", WebApp.class);
+        ServerBank1 serverBank1 = context.getBean("server1", ServerBank1.class);
 // // //        ServerBank2 serverBank2 = context.getBean("server2", ServerBank2.class);
 // // //        ServerDefault serverDefault = context.getBean("serverDefault", ServerDefault.class);
-        System.out.println("2. ServerBank1 -> BaseServer: " + BaseServer.serverLink.get().getUsersDBBank());
+
         app.runApp();
 
     }

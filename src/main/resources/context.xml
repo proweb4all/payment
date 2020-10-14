@@ -5,9 +5,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="webapp" class="ru.sbrf.payment.app.WebApp"></bean>
-    <bean id="server1" class="ru.sbrf.payment.server.ServerBank1"></bean>
-    <bean id="server2" class="ru.sbrf.payment.server.ServerBank2"></bean>
-    <bean id="serverDefault" class="ru.sbrf.payment.server.ServerDefault"></bean>
+    <bean id="webapp" class="ru.sbrf.payment.app.WebApp" />
+    <bean id="server1" scope="prototype" class="ru.sbrf.payment.server.ServerBank1" />
+    <bean id="server2" scope="prototype" class="ru.sbrf.payment.server.ServerBank2" />
+    <bean id="serverDefault" scope="prototype" class="ru.sbrf.payment.server.ServerDefault" />
 
 </beans>
