@@ -1,6 +1,8 @@
 package ru.sbrf.payment.db;
 
 import java.util.HashMap;
+import java.util.Map;
+
 import ru.sbrf.payment.app.AuthStatus;
 import ru.sbrf.payment.app.UserApp;
 import lombok.*;
@@ -8,7 +10,7 @@ import lombok.*;
 @Getter
 
 public abstract class UsersDB implements IUsersDB{
-    private final HashMap<String, UserRecord> usersDB = new HashMap<>();
+    private final Map<String, UserRecord> usersDB = new HashMap<>();
 
     @Override
     public UserApp authUser(String phone, String password) {

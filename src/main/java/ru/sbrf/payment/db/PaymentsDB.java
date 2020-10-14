@@ -1,6 +1,7 @@
 package ru.sbrf.payment.db;
 
 import java.util.HashMap;
+import java.util.Map;
 //import lombok.extern.slf4j.Slf4j;
 import lombok.*;
 @ToString
@@ -9,7 +10,7 @@ import lombok.*;
 
 
 public abstract class PaymentsDB implements IPaymentsDB{
-    private final HashMap<String, Payment> paymentsDB = new HashMap<>();
+    private final Map<String, Payment> paymentsDB = new HashMap<>();
 
     @Override
     public boolean addPaymentToDB(Payment payment) {
