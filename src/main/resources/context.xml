@@ -2,11 +2,16 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd">
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="webapp" class="ru.sbrf.payment.app.WebApp" />
-    <bean id="serverBank" scope="prototype" class="ru.sbrf.payment.server.ServerBank1" />
+    <context:property-placeholder location="classpath:paymentsApp.properties"/>
+
+    <bean id="webapp" class="ru.sbrf.payment.app.WebApp"/>
+    <bean id="serverBank" scope="prototype" class="ru.sbrf.payment.server.${ServerName}"/>
 <!--   ... "ru.sbrf.payment.server.ServerBank2" -->
 
 </beans>
