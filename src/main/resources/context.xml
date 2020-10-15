@@ -11,7 +11,7 @@
     <context:property-placeholder location="classpath:paymentsApp.properties"/>
 
     <bean id="webapp" class="ru.sbrf.payment.app.WebApp"/>
-    <bean id="serverBank" scope="prototype" class="ru.sbrf.payment.server.${ServerName}"/>
-<!--   ... "ru.sbrf.payment.server.ServerBank2" -->
+    <bean id="serverBank" class="ru.sbrf.payment.server.${ServerName}"/>
+    <bean id="serverBank2" scope="prototype" class="ru.sbrf.payment.server.ServerBank2"/>
 
 </beans>

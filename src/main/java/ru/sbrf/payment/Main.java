@@ -19,7 +19,8 @@ public class Main {
         ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
         WebApp app = context.getBean("webapp", WebApp.class);
         BaseServer serverBank = context.getBean("serverBank", BaseServer.class);
-
+        app.runApp();
+        BaseServer serverBank2 = context.getBean("serverBank2", BaseServer.class);
         app.runApp();
 
     }
