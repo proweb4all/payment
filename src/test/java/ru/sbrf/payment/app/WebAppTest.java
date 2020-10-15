@@ -2,7 +2,8 @@ package ru.sbrf.payment.app;
 
 import ru.sbrf.payment.db.Payment;
 import ru.sbrf.payment.db.PaymentStatus;
-import ru.sbrf.payment.db.PaymentsDB;
+//import ru.sbrf.payment.db.PaymentsDB;
+import ru.sbrf.payment.server.ServerBank1;
 
 import java.util.Date;
 
@@ -11,14 +12,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class WebAppTest {
 
     WebApp app = new WebApp();
+    ServerBank1 serverBank1 = new ServerBank1();
     Payment payment;
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
-        app.init();
-        app.authUser("9102222222", "222222", app.getUsersDB());
+        app.authUserApp(ServerBank1.serverLink.get().authUserServer("9102222222", "222222"));
+
         Date dateNow = new Date();
-        payment = new Payment(PaymentsDB.createPaymentID(app.getUser().getPhone(), dateNow),
+        payment = new Payment(Payment.createPaymentID(app.getUser().getPhone(), dateNow),
                 app.getUser().getPhone(), app.getUser().getAccount(), dateNow, PaymentStatus.PS1, "9101234567", 100.0);
     }
 
@@ -26,33 +28,14 @@ class WebAppTest {
     void tearDown() {
     }
 
-//    @org.junit.jupiter.api.Test
-//    void init() {
-//    }
-
     @org.junit.jupiter.api.Test
     void authUser() {
-//        assertTrue(app.authUser("9102222222", "222222", app.getUsersDB()));
+        assertTrue(app.authUserApp(ServerBank1.serverLink.get().authUserServer("9102222222", "222222")));
     }
 
     @org.junit.jupiter.api.Test
     void payApp() {
-        assertTrue(app.payApp("9101234567", 100.0, app.getUsersDB()));
-    }
-
-    @org.junit.jupiter.api.Test
-    void checkPayment() {
-        assertTrue(app.checkPayment(payment.getId()));
-    }
-
-    @org.junit.jupiter.api.Test
-    void paymentToAPI() {
-        assertTrue(app.paymentToAPI(this.payment));
-    }
-
-    @org.junit.jupiter.api.Test
-    void updatePaymentsDB() {
-        assertTrue(app.updatePaymentsDB(this.payment));
+        assertTrue(app.payApp("9101234567", 100.0));
     }
 
     @org.junit.jupiter.api.Test
