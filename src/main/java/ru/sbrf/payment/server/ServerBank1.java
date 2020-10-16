@@ -9,8 +9,8 @@ import lombok.*;
 @ToString
 @Getter
 @Slf4j
-@Component
-@Scope("prototype")
+//@Component
+//@Scope("prototype")
 public class ServerBank1 extends BaseServer{
 
     public ServerBank1() {

@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 @Getter
 @Slf4j
-@Component
+//@Component
 public class WebApp implements IApp {
     private Settings settings = new Settings();
     private UserApp user = new UserApp();
