@@ -1,5 +1,7 @@
 package ru.sbrf.payment.server;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import ru.sbrf.payment.db.*;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +9,8 @@ import lombok.*;
 @ToString
 @Getter
 @Slf4j
-
+//@Component
+//@Scope("prototype")
 public class ServerBank2 extends BaseServer{
 
     public ServerBank2() {
